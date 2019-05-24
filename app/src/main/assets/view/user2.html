@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="../js/vue.min.js"></script>
+    <link rel="stylesheet" href="../css/newtable.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="../css/datatables.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-extend.css">
+    <!-- <link rel="stylesheet" href="../css/master_style.css"> -->
+    <title>会员列表</title>
+    <style type="text/css">
+        #table table {
+            width: 100%;
+            font-size: 14px;
+            border: 1px solid #eee
+        }
+
+        #table {
+            padding: 10px 10px;
+            overflow: scroll;
+        }
+
+        table thead th {
+            background: #f5f5f5;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table tbody td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            border-right: 1px solid #eee;
+        }
+
+        table tbody td img {
+            width: 60px;
+            height: 60px;
+        }
+
+        table tbody td span {
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .label {
+            display: inline;
+            padding: .2em .6em .3em;
+            font-size: 75%;
+            line-height: 1;
+            color: #ffffff;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: baseline;
+            border-radius: .25em;
+        }
+
+        .label-success {
+            background-color: #26c6da !important;
+        }
+
+        .delete {
+            color: red;
+        }
+
+        .edit {
+            color: #008cd5;
+        }
+
+        .add {
+            border: 1px solid #eee;
+            margin: 10px 0;
+            padding: 15px;
+        }
+
+        input {
+            border: 1px solid #ccc;
+            padding: 5px;
+            border-radius: 3px;
+            margin-right: 15px;
+        }
+
+        button {
+            background: #5b9bd1;
+            border: 0;
+            padding: 4px 15px;
+            border-radius: 3px;
+            color: #fff;
+        }
+
+        #mask {
+            background: rgba(0, 0, 0, .5);
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            z-index: 4;
+            top: 0;
+            left: 0;
+        }
+
+        .mask {
+            width: 300px;
+            height: 400px;
+            background: rgba(255, 255, 255, 1);
+            position: absolute;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            z-index: 47;
+            border-radius: 5px;
+        }
+
+        .title {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .title span {
+            float: right;
+            cursor: pointer;
+        }
+
+        .content {
+            padding: 10px;
+        }
+
+        .content input {
+            width: 270px;
+            margin-bottom: 15px;
+        }
+
+        .zzjz {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #000;
+            opacity: 0.3;
+            width: 100%;
+            height: 200%;
+            text-align: center;
+            line-height: 500px;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        /* 隔行变色 */
+        #table tr:nth-child(even) {
+            background-color: #f3f4f6;
+        }
+
+        /* 标题 */
+        .biaoti {
+            font-size: 16px;
+            color: #5c9acf;
+        }
+
+        /* 表格文字颜色 */
+        .neirong {
+            color: #999999;
+        }
+
+        /* 搜索按钮 */
+        .sousuo {
+            float: right;
+        }
+    </style>
+</head>
+
+<body style="background-color:#e9ecf3;">
+<!-- 头部 -->
+<div class="top_abc">
+</div>
+<div class="left_abc">
+</div>
+<!-- 右边显示区域 -->
+<div class="tablele" style="display:none;">
+    <div id="table" class="col-12">
+        <table id="example5" class="table table-bordered table-striped" style="width:100%">
+            <thead>
+            <tr>
+                <th>用户ID</th>
+                <th>账户</th>
+                <th>密码</th>
+                <th>注册时间</th>
+                <th>是否充值</th>
+                <th>渠道</th>
+                <th>会员类型</th>
+                <th>到期时间</th>
+                <th>最后登录时间</th>
+                <th>最后登录IP</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <!--            <tbody class="neirong">-->
+            <!--            <tr v-for="(item,index) in newsList">-->
+            <!--                <td width="5%">{{index+1}}</td>-->
+            <!--                <td>{{item.Account}}</td>-->
+            <!--                <td>{{item.Password}}</td>-->
+            <!--                <td width="10%">{{item.RegisterTime}}</td>-->
+            <!--                <td>{{item.VipType}}</td>-->
+            <!--                <td>{{item.channel}}</td>-->
+            <!--                <td style="display:none;" width="10%">{{item.viptype_expirtime1}}</td>-->
+            <!--                <td>-->
+            <!--                    <div v-for="(item2,index2) in item.vipList">{{item2.content}}</div>-->
+            <!--                </td>-->
+            <!--                <td>-->
+            <!--                    <div v-for="(item2,index2) in item.vipList">{{item2.viptype_expirtime}}</div>-->
+            <!--                </td>-->
+            <!--                <td>{{item.LastTime}}</td>-->
+            <!--                <td>{{item.LastIP}}</td>-->
+            <!--                <td><span @click="deletelist(item.UserID,index)" class="delete">删除</span><span class="edit"-->
+            <!--                                                                                               @click="edit(item,index)">编辑</span>-->
+            <!--                </td>-->
+            <!--            </tr>-->
+            <!--            </tbody>-->
+            <tbody>
+
+            </tbody>
+            <tfoot>
+            <tr>
+                <th>用户ID</th>
+                <th>账户</th>
+                <th>密码</th>
+                <th>注册时间</th>
+                <th>是否充值</th>
+                <th>渠道</th>
+                <th>会员类型</th>
+                <th>到期时间</th>
+                <th>最后登录时间</th>
+                <th>最后登录IP</th>
+                <th>操作</th>
+            </tr>
+            </tfoot>
+        </table>
+        <div id="mask" v-if="editlist">
+            <div class="mask">
+                <div class="title">
+                    编辑
+                    <span @click="editlist=false">
+							X
+						</span>
+                </div>
+                <div class="content">
+                    账号:<input type="text" v-model="editDetail.Account" name="title" value="" placeholder="账号"/>
+                    密码:<input type="text" v-model="editDetail.Password" name="user" value="" placeholder="密码"/>
+                    <button @click="update">更新</button>
+                    <button @click="editlist=false">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<!--<script src="../js/jquery-2.1.4.min.js"></script>-->
+<script src="../js/datatables.min.js"></script>
+<script src="../js/jquery-ui.js"></script>
+<script src="../js/cookie.js"></script>
+<script src="../js/axios.js"></script>
+<script src="../layDate-v5.0.9/laydate/laydate.js"></script>
+<link rel="stylesheet" href="../css/sweetalert.css">
+<script src="../js/sweetalert.min.js"></script>
+<script>
+    var user = localStorage.getItem("user");
+    var password = localStorage.getItem("password");
+    var view_data = {}
+    if (!user) {
+        window.location.href = "./login.html";
+    }
+    var save;
+    var editImg;
+    var editIndex;
+    var arr_all = [];
+    var table;
+    laydate.render({
+        elem: '#addDate'
+        , type: 'date'
+        , format: 'yyyy-MM-dd'
+        ,
+        done: function (value, date, endDate) {
+            console.log('你选择的日期是：' + value + '');
+            // console.log(_that.add)
+            // _that.add['date'] = value;
+            console.log(date, endDate)
+        }
+    });
+    var app = new Vue({
+        el: '#table',
+        data: {
+            addDetail: {},
+            editlist: false,
+            editDetail: {},
+            src: '',
+            newsList: [],
+            editid: '',
+            more: [],
+            //add：编辑的信息
+            add: {
+                UserID: '',
+                Account: '',
+                Password: '',
+                RegisterTime: '',
+                VipType: '',
+                channel: '',
+                Account: '',//会员类型
+                Account: '',//到期时间
+                LastTime: '',
+                LastIP: '',
+            }
+        },
+        created: function () {
+            $('#example5 tfoot th').each(function () {
+                var title = $(this).text();
+                if (title) {
+                    $(this).html('<input type="text" class="my-5" placeholder="搜索' + title + '" />');
+                }
+            });
+        },
+        mounted: function () {
+            var _this = this;
+            axios.get('http://192.168.1.186:8093/data', {
+                params: {"dataDase": "sino", "table": "type_list"}
+            })
+                .then(function (response) {
+                    $.ajax({
+                        url: 'http://192.168.1.186:8093/data',
+                        type: 'get',
+                        dataType: "json",
+                        async: false,
+                        data: {
+                            "dataDase": "sino", "table": "member_list"
+                        },
+                        success: function (data) {
+                            for (var c = 0; c < data.length; c++) {
+                                if (data[c].VipType == 1) {
+                                    data[c].VipType = "是"
+                                } else if (data[c].VipType == 2) {
+                                    data[c].VipType = "否"
+                                }
+                            }
+                            _this.newsList = data;
+                            for (let i = 0; i < data.length; i++) {
+                                let _that = data[i];
+                                _that['vipList'] = [];
+                                for (let key in _that) {
+                                    // 如果key字段包含viptype_expirtime 且不为空
+                                    if (key.indexOf('viptype_expirtime') >= 0 && _that[key]) {
+                                        // arr_[i]=[];
+                                        // vip类型
+                                        let typeNum = key.replace('viptype_expirtime', '');
+                                        var conetnt;
+                                        var date_;
+                                        if (parseInt(_that['viptype' + typeNum]) == 1) {
+                                            date_ = "年"
+                                        } else if (parseInt(_that['viptype' + typeNum]) == 2) {
+                                            date_ = "季度"
+                                        } else if (parseInt(_that['viptype' + typeNum]) == 3) {
+                                            date_ = "月"
+                                        }
+                                        for (var j = 0; j < response.data.length; j++) {
+                                            if (parseInt(typeNum) == response.data[j].id) {
+                                                conetnt = response.data[j].type + "/" + date_;
+                                            }
+                                        }
+                                        // 组合然后push进vipList
+                                        let _obj = {
+                                            ['viptype']: date_,
+                                            ['viptype_expirtime']: _that[key],
+                                            ["num"]: parseInt(typeNum),
+                                            ['content']: conetnt
+                                        }
+                                        // _that['vipList'].push(_obj)
+                                        _this.newsList[i].vipList.push(_obj)
+                                    }
+                                }
+                            }
+                            console.log(_this.newsList)
+                            tableSearchInit(_this.newsList)
+                             // 将左侧菜单页面请求过来
+                                $.ajax({
+                                    url: "../common/leftmenu.html",
+                                    type: "get",
+                                    success: function (data) {
+                                        // console.log(data)
+                                        $(".left_abc").html(data)
+                                        // console.log(data)
+                                    }
+                                })
+                                // 将顶部导航页面请求过来
+                                $.ajax({
+                                    url: "../common/daohang.html",
+                                    type: "get",
+                                    success: function (data) {
+                                        // console.log(data)
+                                        $(".top_abc").html(data)
+                                        // console.log(data)
+                                    }
+                                })
+                        },
+                        error: function (data) {
+
+                        }
+                    })
+                    // for(var a=0;a<_this.newsList.length;a++){
+                    // 	_this.newsList[a].arr_all=[];
+                    // 	for(var b=0;b<arr_all.length;b++){
+                    // 		if(_this.newsList[a].Account==arr_all[b].Account){
+                    // 			_this.newsList[a].arr_all.push(arr_all[b]);
+                    // 		}
+                    // 	}
+
+                    // }
+                    console.log(_this.newsList)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+            // axios
+            // 	.get('http://192.168.1.186:8093/data', { params: { "dataDase": "sino", "table": "member_list" } })
+            // 	.then(response => (
+            // 		this.newsList = response.data,
+            // 		function isVip(data){
+            // 			for(var i=0;i<data.length;i++){
+            // 				if(data[i].VipType==1){
+            // 					data[i].VipType="是"
+            // 				}else{
+            // 					data[i].VipType="否"
+            // 				}
+            // 			}
+            // 		}),
+            // 		// isVip(this.newsList)
+
+            // 	)
+
+            $(".tablele").show()
+        },
+        methods: {
+            // 图片
+            imgAdd() {
+                var oFReader = new FileReader();
+                var file = document.getElementById('add_img').files[0];
+                oFReader.readAsDataURL(file);
+                oFReader.onloadend = function (oFRevent) {
+                    // $('img').attr('src',src);
+
+                    $("body").append("<div class='zzjz'>正在加载...</div>");
+                    setTimeout(function () {
+                        $(".zzjz").remove();
+                        save = oFRevent.target.result;
+                    }, 500)
+
+                }
+            },
+            imgEdit(index) {
+                var oFReader2 = new FileReader();
+                var file2 = document.getElementById('edit_img').files[0];
+                oFReader2.readAsDataURL(file2);
+                oFReader2.onloadend = function (oFRevent) {
+                    // $('img').attr('src',src);
+
+                    $("body").append("<div class='zzjz'>正在加载...</div>");
+                    setTimeout(function () {
+                        $(".zzjz").remove();
+                        editImg = oFRevent.target.result;
+                    }, 500)
+
+                }
+            },
+            //新增
+            adddetail() {
+
+                var fileList = $('#add_img');
+                var imgUrl = "../img/" + fileList[0].name;
+                //这里的思路应该是把this.addDetail传给服务端，然后加载列表this.newsList
+                //this.newsList.push(this.addDetail)
+                this.newsList.push({
+                    title: this.addDetail.title,
+                    user: this.addDetail.user,
+                    dates: this.addDetail.dates,
+                    img: save,
+                    id: Math.floor(Math.random() * 1000000 + 1)
+                })
+
+                // axios.get('192.168.1.145:8080/',{"a":1}).then((res) =>{
+                // // 若返回正确结果，清空新增输入框的数据
+                // // this.addDetail.title = ""
+                // // this.addDetail.user = ""
+                // // this.addDetail.dates = ""
+                // console.log("成功")
+                // })
+
+
+            },
+            //删除
+            deletelist(id, i) {
+                console.log(id)
+                //这边可以传id给服务端进行删除  ID = id
+                $.ajax({
+                    url: 'http://192.168.1.186:8093/delData_user',
+                    data: {
+                        id: id,
+                        database: "sino",
+                        table: "member_list"
+                    },
+                    type: 'get',
+                    success: function (data) {
+                        console.log("删除成功")
+                        window.location.reload();
+                    }, error: function (data) {
+                        console.log("删除失败")
+                    }
+                })
+                this.newsList.splice(i, 1);
+            },
+            //编辑
+            edit(item, index) {
+                editIndex = index;
+                this.editDetail = {
+                    UserID: item.UserID,
+                    Account: item.Account,
+                    Password: item.Password,
+                    RegisterTime: item.RegisterTime,
+                    Vip: item.Vip,
+                    ExpirTime: item.ExpirTime,
+                    VipType: item.VipType,
+                    LastTime: item.LastTime,
+                    LastIP: item.LastIP,
+                }
+                this.editlist = true
+                this.editid = item.UserID
+
+            },
+            //确认更新
+            update() {
+                //编辑的话，也是传id去服务端
+                //axios.get('url',{ID:id}).then((res) =>{
+                //			加载列表
+                //})
+                let _this = this
+                up_add = {
+                    UserID: _this.editDetail.UserID,
+                    Account: _this.editDetail.Account,
+                    Password: _this.editDetail.Password,
+                    // RegisterTime: _this.editDetail.RegisterTime,
+                    // Vip: _this.editDetail.Vip,
+                    // ExpirTime: _this.editDetail.ExpirTime,
+                    // VipType: _this.editDetail.VipType,
+                    // LastTime: _this.editDetail.LastTime,
+                    // LastIP: _this.editDetail.LastIP,
+                }
+                console.log(editIndex)
+                _this.newsList[editIndex].Password = up_add.Password
+                _this.newsList[editIndex].Account = up_add.Account
+                this.editlist = false;
+                $.ajax({
+                    url: 'http://192.168.1.186:8093/user/edit',
+                    type: 'get',
+                    // processData: false,
+                    // contentType: false,
+                    // dataType: "json",
+                    data: up_add,
+                    success: function (data) {
+                        console.log(data);
+                        window.location.reload();
+                    }, error: function (data) {
+                        console.log(data)
+                    }
+                })
+
+            }
+        }
+    })
+
+    function tableSearchInit(data) {
+        table = $("#example5").DataTable({
+            data: data,
+            columns: [
+                {
+                    data: function (row, type, set, meta) {
+                        return meta.row + 1
+                    }
+                },
+                {data: 'Account'},
+                {data: 'Password'},
+                {data: 'RegisterTime'},
+                {data: 'VipType'},
+                {data: 'channel'},
+                {
+                    data: 'vipList',
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        let str = "";
+                        for (let item of rowData.vipList) {
+                            str += "<div>" + item.content + "</div>"
+                        }
+                        $(td).html(str)
+                    }
+                },
+                {
+                    data: 'vipList',
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        let str = "";
+                        for (let item of rowData.vipList) {
+                            str += "<div>" + item.viptype_expirtime + "</div>"
+                        }
+                        $(td).html(str)
+                    }
+                },
+                {data: 'LastTime'},
+                {data: 'LastIP'},
+                {
+                    data: 'null',
+                    defaultContent: '<span class="label label-success curP btnEdit" data-toggle="modal" data-target="#modal-add">编辑</span><span class="label label-danger curP ml-5 btnDelete">删除</span>',
+                    createdCell: function (td, cellData, rowData, row, col) {
+                        $(td).addClass('table-edit').attr('data-id', row);
+                    }
+                },
+            ],
+            language: {
+                "sProcessing": "处理中...",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            }
+        });
+        table.columns().every(function () {
+            var that = this;
+            $('input', this.footer()).on('keyup change', function () {
+                if (that.search() !== this.value) {
+                    that
+                        .search(this.value)
+                        .draw();
+                }
+            });
+        });
+    }
+
+    // 编辑
+    $(document).on('click', '.btnEdit', function () {
+        var id = $(this).parent().data('id')
+        console.log(id)
+        var item = app.newsList[id];
+        console.log("1111",item);
+        editIndex = id;
+        // app.add=item
+        console.log("app",app.add)
+        app.editDetail = {
+            UserID: item.UserID,
+            Account: item.Account,
+            Password: item.Password,
+            RegisterTime: item.RegisterTime,
+            Vip: item.Vip,
+            ExpirTime: item.ExpirTime,
+            VipType: item.VipType,
+            LastTime: item.LastTime,
+            LastIP: item.LastIP,
+        }
+        app.editlist = true
+        app.editid = item.UserID
+
+    })
+    // 删除
+    $(document).on('click', '.btnDelete', function () {
+        var id = $(this).parent().data('id')
+        console.log(id)
+        var item = app.newsList[id];
+        swal({
+            title: "警告",
+            text: "你确定要删除《" + item.Account + "》吗？",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "删除",
+            cancelButtonText: "取消",
+            closeOnConfirm: false
+        }, function () {
+            $.ajax({
+                url: 'http://192.168.1.186:8093/delData_user',
+                data: {
+                    id: item.UserID,
+                    database: "sino",
+                    table: "member_list"
+                },
+                type: 'get',
+                success: function (data) {
+                    console.log(data);
+                    app.newsList.splice(id, 1);
+                    table.clear();
+                    table.rows.add(app.newsList);
+                    table.draw();
+                    swal("删除成功", "你已删除删除《" + item.Account + "》", "success");
+                }, error: function (data) {
+                    console.log("删除失败");
+                }
+            })
+        })
+    })
+</script>
+<script>
+   
+</script>
+
+</html>

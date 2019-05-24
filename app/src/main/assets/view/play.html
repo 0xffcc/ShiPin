@@ -1,0 +1,638 @@
+﻿<!DOCTYPE html>
+<html lang="en" id="myElement">
+
+<head>
+    <meta charset="UTF-8"/>
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <meta content="yes" name="apple-mobile-web-app-capable"/>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+    <meta content="telephone=no" name="format-detection"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>播放</title>
+    <link rel="stylesheet" type="text/css" href="../css/bus.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/index.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/videoControls.css"/>
+    <link rel="stylesheet" href="../css/swiper.min.css"/>
+</head>
+<style>
+    body {
+        position: relative;
+    }
+
+    .ktvip {
+        background: url(../img/tip/bg@3x.png) no-repeat;
+        width: 212px;
+        height: 20px;
+        background-size: 100% 100%;
+        padding-left: 11px;
+        color: #ffb04a;
+        font-size: 11px;
+        line-height: 20px;
+        top: 119px;
+        left: -57px;
+        position: absolute;
+        z-index: 99999999999999999999999999;
+        transform: rotate(90deg);
+        display: none;
+    }
+
+    .ktvip img {
+        width: 16px;
+        float: left;
+        padding-right: 5px;
+        height: 16px;
+        margin: 2px auto;
+    }
+
+    .zzc {
+        width: 100%;
+        height: 250px;
+        top: 0;
+        left: 0;
+        position: absolute;
+        /* display: none !important; */
+        z-index: 99999999999;
+    }
+
+    .fanhui {
+        font-size: 37px;
+        /* margin-top: -259px; */
+        position: absolute;
+        top: 0;
+        left: 0;
+        color: white;
+        padding-left: 10px;
+        z-index: 99999999999999999;
+    }
+
+    #video {
+        position: fixed !important;
+    }
+
+    *::-webkit-media-controls-fullscreen-button {
+        display: none;
+    }
+
+    /* *::-internal-track-segment-background{
+      display: none !important;
+    } */
+    *::-webkit-media-controls-enclosure {
+        margin-bottom: -9px;
+        opacity: 0.3;
+    }
+
+    /* *::-internal-media-controls-button-panel{
+    backgroung:yellow;
+    } */
+    *::-webkit-media-controls-panel {
+        background-size: auto 0px;
+    }
+
+    .fanhui_img {
+        z-index: 999999;
+        position: absolute;
+        top: 17px;
+        right: 22px;
+        transform: rotate(90deg);
+    }
+
+    .fanhui_img img {
+        width: 26px;
+    }
+
+
+
+
+</style>
+
+<body>
+
+<video style="object-fit:fill" playsinline -webkit-playsinline id="video"
+       preload="auto" poster="http://download.dcloud.net.cn/FastAndroid-mini.jpg" width="100%"
+       height="auto">
+    <!-- <source src="http://download.dcloud.net.cn/FastAndroid-mini.m4v" type="video/mp4">
+            <source src="http://download.dcloud.net.cn/FastAndroid-mini.webm" type="video/webm">
+            <source src="http://download.dcloud.net.cn/FastAndroid-mini.ogv" type="video/ogg"> -->
+    <!-- <source src="http://download.dcloud.net.cn/FastAndroid-mini.mp4"> -->
+    <source src="">
+</video>
+<div id="fade_div" onclick="tz()" class="fanhui_img"><img src="../img/tuiguang/fanhui_02@3x.png"></div>
+
+
+<div class="ktvip" style="display:none;">
+    <img src="../img/tip/vip@3x.png">
+    <div class="isvip" style="display:inline;"> 请开通会员继续观看!</div>
+    <span class="vip" style="color:#ff4444; margin-right: 12px;float: right;">开通会员</span>
+</div>
+
+<div class="playBtn"></div>
+<div class="controls">
+    <div class="switch fa fa-play uiChange"></div>
+    <div class="expend fa fa-pause"></div>
+    <div class="progress">
+        <div class="line"><i></i></div>
+    </div>
+    <div class="times">
+        <span class="currentTime">00:00:00</span> / <span class="totalTime">00:00:00</span>
+    </div>
+</div>
+
+</body>
+<script src="../js/cookie.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/hammer.js"></script>
+
+<script>
+    var myElement = document.getElementById('myElement');
+    var mc = new Hammer(myElement);
+    mc.on("tap", function (ev) {
+        setTimeout(function () {
+            $("#fade_div").stop().fadeToggle();
+            $('.controls').stop().fadeToggle();
+        }, 500)
+        setTimeout(function () {
+            $("#fade_div").stop().hide();
+            $('.controls').stop().hide()
+        }, 9000)
+    });
+
+</script>
+<script>
+    // 返回上一页按钮
+    function tz() {
+        window.history.back(-1);
+    }
+
+    let myVideo = document.getElementById('video');
+    myVideo.controls = false;
+
+    let w = document.documentElement.clientWidth || document.body.clientWidth;
+    let h = document.documentElement.clientHeight || document.body.clientHeigth;
+    let cha = Math.abs(h - w) / 2;
+    myVideo.style.zIndex = 2000;
+    myVideo.style.top = 0;
+    var _translate;
+    // 判断是否横屏直接进页面
+    if (window.orientation == 90) {
+        myVideo.width = w;
+        myVideo.height = h;
+        _translate = h;
+    } else {
+        myVideo.width = h;
+        myVideo.height = w;
+        _translate = w;
+    }
+    // 监听横屏
+    styleChange()
+    window.addEventListener("orientationchange", function () {
+        // Announce the new orientation number
+        styleChange()
+    }, false);
+    function styleChange() {
+        // 如果是横屏
+        if (window.orientation == 90) {
+
+            $('video').css({
+                'transform':'translate(0,0) rotate(0deg)',
+            })
+            $('.playBtn').css({
+                'width':'20vh',
+                'height':'20vh',
+                'transform':'translate(0,0) rotate(0deg)',
+                'background-size':'10vh 10vh'
+            })
+            $('.ktvip').css({
+                'transform':'translate(0,0) rotate(0deg)',
+                'left':'2%',
+                'top':'85%'
+            })
+            $('.fanhui_img').css({
+                'transform':'translate(0,0) rotate(0deg)',
+                'right':'auto',
+                'left':'2%'
+            })
+            $('.controls').css({
+                'top':'100%',
+                'transform':'rotate(-90deg)',
+                'transform-origin':'left top'
+            })
+            setTimeout(function () {
+                $('video').css({
+                    'width':$(window).width(),
+                    'height':$(window).height()
+                })
+                var scale = $(window).width() / 736;
+                $('.controls').css({
+                    'transform':'translate(0,0) scale('+scale+') rotate(-90deg)',
+                    'transform-origin':'left top'
+                })
+            },200)
+        } else {
+            setTimeout(function () {
+                $('video').css({
+                    'transform':'translate('+$(window).width()+'px,0) rotate(90deg)',
+                    'width':$(window).height(),
+                    'height':$(window).width()
+                })
+            },200)
+            $('video').css({
+                'transform':'translate(0,0) rotate(90deg)',
+                'transform-origin':'left top'
+            })
+            var scale = $(window).height() / 736;
+            $('.playBtn,.ktvip,.fanhui_img,.controls').removeAttr('style')
+            $('.controls').css({
+                'transform':'scale('+scale+')',
+                'transform-origin':'left top'
+            })
+        }
+        console.log('宽度:%s,高度:%s',w,h)
+
+    }
+
+    /****2019.04.25新增****/
+    var touchStart,hideTime, bodyClicked = false;
+    // 切换视图
+    function uiChange(show, hide) {
+        if (hide) {
+            var arr = hide.split(',');
+            for (var i = 0; i < arr.length; i++) {
+                $('' + arr[i] + '').removeClass('uiChange');
+            }
+        }
+        if (show) {
+            var arr = show.split(',');
+            for (var i = 0; i < arr.length; i++) {
+                $('' + arr[i] + '').addClass('uiChange');
+            }
+        }
+
+    }
+    // 将当前秒数转换为时间
+    function getTimeBySecond(second){
+        var hour = parseInt(second / (60* 60));
+        var minute = parseInt((second/60) % 60);
+        var second = parseInt(second % 60);
+        return (hour < 10 ? "0" + hour:hour) + ":" + (minute < 10 ? "0" + minute:minute) + ":" + (second < 10 ? "0" + second:second);
+    };
+    // 自动隐藏控制面板
+    function hideControls(ms) {
+        ms = ms || 5000;
+        hideTime = setTimeout(function () {
+            $('.controls,#fade_div').fadeOut();
+        }, ms)
+    }
+    // 播放
+    $('.fa-play').click(function () {
+        myVideo.play();
+    });
+    $('.playBtn').click(function () {
+        $(this).hide();
+        myVideo.play();
+        $('.controls,#fade_div').fadeIn(1000);
+        hideControls();
+    });
+    // 暂停
+    $('.fa-pause').click(function () {
+        myVideo.pause();
+    });
+    // 可以播放
+    myVideo.oncanplay = function () {
+        $('.totalTime').text(getTimeBySecond(myVideo.duration))
+    }
+    // 监听播放
+    myVideo.addEventListener('timeupdate', function () {
+        uiChange('.fa-pause', '.fa-play');
+        $('.playBtn').hide()
+        var pValue = (myVideo.currentTime / myVideo.duration) * 100;
+        $(".controls .line").css("height", pValue + "%");
+        $('.currentTime').text(getTimeBySecond(myVideo.currentTime))
+        console.log(myVideo.currentTime)
+    })
+    myVideo.addEventListener('pause',function () {
+        uiChange('.fa-play','.fa-pause');
+    })
+    // 拖拽进度条
+    $('.progress .line i').on('touchstart',function (e) {
+        clearTimeout(hideTime);
+        touchStart = event.touches[0];
+        myVideo.pause();
+        console.log(touchStart)
+        $('.progress .line').css({
+            'transition':'none'
+        });
+    }).on('touchmove',function (e) {
+        if(event.touches[0].pageY - touchStart.pageY > 5 || event.touches[0].pageY - touchStart.pageY < 5){
+            var currentTime = (event.touches[0].pageY - $('.progress')[0].getBoundingClientRect().top) / $('.progress').height() * myVideo.duration;
+            currentTime = parseFloat(currentTime.toFixed(6));
+            myVideo.currentTime = currentTime;
+            console.log(currentTime,myVideo.currentTime)
+        }
+    }).on('touchend',function (e) {
+        $('.progress .line').css({
+            'transition':'height .3s linear'
+        });
+        myVideo.play();
+        hideControls()
+    });
+    // 点击进度条
+    $('.progress').click(function (e) {
+        clearTimeout(hideTime);
+        var currentTime = e.offsetY / $('.progress').height() * myVideo.duration;
+        currentTime = parseFloat(currentTime.toFixed(6));
+        myVideo.currentTime = currentTime;
+        myVideo.play();
+        hideControls();
+    })
+    /****2019.04.25新增****/
+
+
+
+    function getParam(paramName) {
+        paramValue = "", isFound = !1;
+        if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+            arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0;
+            while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++
+        }
+
+        return paramValue == "" && (paramValue = null), paramValue
+    }
+    var id = getParam("id");
+    var vip = parseInt(getParam("vip"));
+
+
+
+    
+    console.log(vip == false)
+    var time;
+   $.ajax({
+       url: 'http://192.168.1.186:8093/playVideo',
+       data: {
+           id: id,
+           database: "test",
+           table: "Sino"
+       },
+       type: 'get',
+       success: function (data) {
+           $("#video").attr("src", data[0].vedio);
+           time = data[0].limitTime;
+        // time=5;
+
+       }, error: function (data) {
+           console.log(data)
+       }
+   })
+
+    $(function () {
+        //   var vip=localStorage.getItem("vip");
+        var vip=false;
+
+        var canshu = getParam("canshu")
+        $.ajax({
+            url:"http://192.168.1.186:8093/login",
+            data:{
+				userName:localStorage.getItem("user"),
+                passWord:localStorage.getItem("password"),
+                login:"member_list"
+			},
+            type:"get",
+            success:function(data){
+                var key= "viptype"+getParam("canshu");
+                console.log(data[0])
+                if(data[0]){
+                    if(data[0][key]==1 || data[0][key]==2 || data[0][key]==3){
+                    console.log(data[0][key] +"sss")
+                    vip = true;
+                    $(".ktvip").hide();
+                    time=99999999999999999999999999999999999999;
+                }else{
+                    vip = false;
+                    $(".ktvip").show();
+                }
+                }else{
+                    vip = false;
+                    $(".ktvip").show();
+                }
+                
+                console.log(key)
+            }
+        })
+        console.log(canshu)
+        if (canshu == "zy") {
+            
+        } else {
+             
+        }
+        var play = true;
+
+        var Media = document.querySelector("video");
+
+        //客户端开始请求数据事件
+        Media.addEventListener("loadstart", function (event) {
+            console.log(vip)
+            if (!vip) {
+                // $(".zzc").show();
+                $(".ktvip").show();
+                if (Media.currentTime >= time) {
+                    Media.currentTime = time;
+                    $(".zzc").show();
+                }
+                // $(".vip").show();
+            }
+            console.log("客户端开始请求数据");
+        });
+
+        //客户端暂停事件
+        Media.addEventListener("pause", function (event) {
+            if (!vip) {
+                if (Media.currentTime >= time) {
+                    Media.currentTime = time;
+                    $(".zzc").show();
+                }
+            }
+            $('.playBtn').show();
+            console.log(time)
+        });
+
+        //客户端播放按钮事件
+        Media.addEventListener("play", function (event) {
+            if (!play) {
+                Media.currentTime = time;
+                Media.pause();
+                $(".zzc").show();
+            }
+        });
+
+        //请求数据遇到错误事件
+        Media.addEventListener("error", function (event) {
+            console.log("请求数据遇到错误");
+            // Media.currentTime = timeDisplay;
+            // $('.playBtn').show();
+        });
+
+        //中途加载暂停
+        Media.addEventListener("canplay", function (event) {
+            console.log("可以播放，但中途可能因为加载而暂停");
+            if (!vip) {
+                if (Media.currentTime >= time) {
+                    Media.currentTime = time;
+                    $(".zzc").show();
+                   
+                }
+            }
+            $('.playBtn').show();
+            // Media.play();
+        });
+
+        Media.addEventListener("stalled", function (event) {
+            console.log("没有网速");
+            if (!vip) {
+                if (Media.currentTime >= time) {
+                    Media.currentTime = time;
+                    $(".zzc").show();
+                }
+            }
+            // Media.play();
+            // Media.currentTime = timeDisplay;
+        });
+
+        //寻找中
+        Media.addEventListener("seeking", function (event) {
+            console.log("寻找中");
+            if (!vip) {
+                if (Media.currentTime >= time) {
+                    Media.currentTime = time;
+                    $(".zzc").show();
+                }
+            }
+            console.log(Media.currentTime)
+
+        });
+
+        //等待数据，并非错误
+        Media.addEventListener("waiting", function (event) {
+            console.log("等待数据，并非错误~~");
+            // if(timeDisplay){
+            //   Media.currentTime = timeDisplay;
+            // }
+        });
+        Media.addEventListener("fullscreenchange", function (e) {
+            console.log("全屏")
+        });
+
+        // 播放结束事件
+        Media.addEventListener("ended", function (event) {
+            // 结束后从头播放
+            // 退出全屏
+            exitFullscreen()
+            Media.play();
+        });
+
+        var send_off = true;
+        var timeDisplay;
+        // 监听播放进度
+        Media.addEventListener(
+            "timeupdate",
+            function () {
+                //用秒数来显示当前播放进度
+                timeDisplay = Media.currentTime;
+                if (!vip) {
+                    // if(timeDisplay>=180){
+                    if (timeDisplay >= time) {
+                        play = false;
+                        Media.pause();
+                        $(".isVip").html("请开通会员继续观看！");
+                    }
+                }
+
+            },
+            false
+        );
+
+        //进入全屏
+        function FullScreen() {
+            var ele = document.documentElement;
+            if (ele.requestFullscreen) {
+                ele.requestFullscreen();
+            } else if (ele.mozRequestFullScreen) {
+                ele.mozRequestFullScreen();
+            } else if (ele.webkitRequestFullScreen) {
+                ele.webkitRequestFullScreen();
+            }
+        }
+
+        //退出全屏
+        function exitFullscreen() {
+            var de = document;
+            if (de.exitFullscreen) {
+                de.exitFullscreen();
+            } else if (de.mozCancelFullScreen) {
+                de.mozCancelFullScreen();
+            } else if (de.webkitCancelFullScreen) {
+                de.webkitCancelFullScreen();
+            }
+        }
+    })
+
+</script>
+<script type="text/javascript">
+    /**
+     * 视频全屏播放旋转目前的逻辑
+     * 视频全屏，即锁定屏幕为横屏。
+     * 视频恢复，则解除屏幕方向的锁定。
+     * 具体的切换，根据自己的实际业务做相应的操作。
+     */
+        // Android平台的视频全屏旋转
+    var fullScreenOfAndroid = function () {
+            if (true) {
+                // 最新5+API的支持
+                var self = plus.webview.currentWebview();
+                self.setStyle({
+                    videoFullscreen: 'landscape'
+                });
+            } else {
+                // 如果暂未更新sdk，可以先使用差量升级等方式，做出兼容处理；
+                // 旧版本下的兼容处理
+                document.addEventListener('webkitfullscreenchange', function () {
+                    var el = document.webkitFullscreenElement; //获取全屏元素
+                    if (el) {
+                        plus.screen.lockOrientation('landscape'); //锁死屏幕方向为横屏
+                    } else {
+                        plus.screen.unlockOrientation(); //解除屏幕方向的锁定
+                    }
+                });
+
+            }
+        };
+    // iOS平台的视频全屏旋转
+    var fullScreenOfIos = function (videoElem) {
+        // 监听的事件与Android平台有很大区别
+        videoElem.addEventListener('webkitbeginfullscreen', function () {
+            plus.screen.lockOrientation('landscape'); //锁死屏幕方向为横屏
+        });
+        videoElem.addEventListener('webkitendfullscreen', function () {
+            plus.screen.unlockOrientation(); //解除屏幕方向的锁定
+        });
+    };
+    // 涉及到5+API的内容，均在plusready事件后调用；
+    document.addEventListener('plusready', function () {
+        var osName = plus.os.name;
+        if (osName === 'Android') {
+            fullScreenOfAndroid();
+        } else if (osName === 'iOS') {
+            var videoElem = document.getElementById('video');
+            fullScreenOfIos(videoElem);
+        }
+    });
+
+    $(".vip").click(function () {
+        window.location.href="./chongZhi.html";
+    })
+    function fh() {
+        window.history.back(-1);
+    }
+</script>
+
+</html>

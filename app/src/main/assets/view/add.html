@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="../css/newtable.css">
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="../js/jquery-2.1.4.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <link rel="stylesheet" href="../css/add.css">
+    <title>添加页面</title>
+    <style>
+        #son{
+            width: 0%;
+            font-size: 18px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            text-align: center;
+            background-color:rgba(211, 33, 33, 0.2);
+        }
+        #son2{
+            width: 0%;
+            font-size: 18px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            text-align: center;
+            background-color:rgba(211, 33, 33, 0.2);
+        }
+        .zzjz{
+				position: fixed;
+				top: 0;
+				left: 0;
+				background: #000;
+				opacity: 0.3;
+				width: 100%;
+				height: 200%;
+				text-align: center;
+				line-height: 500px;
+				color: #fff;
+				font-size: 20px;
+			}
+            input,textarea{
+                padding-left: 10px;
+            }
+            #add_img,#videoAdd{
+                padding-top: 6px;
+            }
+    </style>
+</head>
+
+<body>
+    <!-- 头部 -->
+    <div class="top_abc">
+        </div>
+        <!-- 左边菜单栏 -->
+        <div class="left_abc">
+              </div>
+              <!-- 显示区域 -->
+              <div class="right_abc">
+                    <div class="biankuang">
+                            <div id="son"></div>
+                            <div id="son2"></div>
+                            <p class="biaoti">上传视频</p>
+                            <div class="tablele">
+                                <div id="table">
+                                    <div class="add">
+                                        <input type="text" v-model="addDetail.title" name="title" value="" placeholder="视频标题" />
+                                        <textarea name="text" value="" placeholder="副标题" v-model="addDetail.text" /></textarea>
+                                        上传封面：<input type="file" accept="image/*" v-model="addDetail.src" name="multerFile"
+                                            class="multerFile" multiple @change='imgAdd' id="add_img">
+                                        上传视频：
+                                        
+                            <div class="shangchuanfs">
+                                <input style="margin-right: 6px;" class="bendi click link_tab" type="button" name="本地视频" value="本地视频">
+                                <input class="lianjie link_tab" type="button" name="输入链接" value="输入链接">
+                            </div>
+                                        <input type="file" name="multerFile" class="multerFile" multiple
+                                             id="videoAdd">
+                                        <input type="text" id="VIDEO2" v-model="addDetail.vedio" placeholder="输入视频链接" class="videolianjie" style="display:none;">
+                                        <input class="sktime" onkeyup="check2(this.value)" type="text" v-model="addDetail.limitTime" name="shikan" value="" placeholder="试看时间">
+                                        <input type="text" v-model="addDetail.user" name="user" placeholder="发布人" />
+                                        <input type="text" class="quanzhong" onkeyup="check(this.value)" v-model="addDetail.weight" name="weight"  placeholder="权重 0-200" />
+                                        <select class="leixing">
+                                            <option value="娱乐" data-num="1">娱乐</option>
+                                            <option value="新闻" data-num="2">新闻</option>
+                                            <option value="儿童" data-num="3">儿童</option>
+                                        </select>
+                                        <button onclick="fh()" class="bnt2" @click="adddetail">返回</button>
+                                        <button class="bnt1" @click="adddetail">新增</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+              </div>
+   
+</body>
+
+<script src="../js/cookie.js"></script>
+<script src="../js/axios.js"></script>
+<script>
+    var save;
+    var editImg;
+    var editIndex;
+    var id_;
+    var app = new Vue({
+        el: '#table',
+        data: {
+            addDetail: {},
+            editlist: false,
+            editDetail: {},
+            src: '',
+            newsList: [],
+            editid: ''
+        },
+        created: function () {
+
+            axios
+                .get('http://192.168.1.186:8093/data', { params: { "dataDase": "test", "table": "Sino" } })
+                .then(response => (
+                    id_=response.data.length,
+                    this.newsList = response.data))
+
+        },
+
+        mounted() {
+            // axios
+            // 	.get('http://192.168.1.186:8093/data')
+            // 	.then(response => (this.newsList=response.data))
+            // // }
+            // var m=this;
+            // 	console.log(this)
+            // 	$.ajax({
+            // 		url:"http://192.168.1.186:1000/data",
+            // 		type: "GET",
+            // 		dataType:"json",
+            // 		context: this, // 把vue实例传过去或者使用箭头函数
+            // 		success: function(res){
+            // 		// console.log(res[1]);
+            // 		this.newsList=res;
+            // 		console.log(this.newsList);
+            // 		},error:function(data){
+            // 			console.log(data)
+            // 		}
+            // 	})
+        },
+
+        methods: {
+            // 图片
+            imgAdd() {
+                var oFReader = new FileReader();
+                var file = document.getElementById('add_img').files[0];
+                oFReader.readAsDataURL(file);
+                oFReader.onloadend = function (oFRevent) {
+                    // $('img').attr('src',src);
+
+                    $("body").append("<div class='zzjz'>正在加载...</div>");
+                    setTimeout(function () {
+                        $(".zzjz").remove();
+                        save = oFRevent.target.result;
+                    }, 500)
+
+                }
+                // console.log(this.data.newsList)
+            },
+            imgEdit(index) {
+                var oFReader2 = new FileReader();
+                var file2 = document.getElementById('edit_img').files[0];
+                oFReader2.readAsDataURL(file2);
+                oFReader2.onloadend = function (oFRevent) {
+                    // $('img').attr('src',src);
+
+                    $("body").append("<div class='zzjz'>正在加载...</div>");
+                    setTimeout(function () {
+                        $(".zzjz").remove();
+                        editImg = oFRevent.target.result;
+                    }, 500)
+
+                }
+            },
+           //新增
+					adddetail(e) {
+                        var tye_=$(".leixing option:selected").data("num");
+                        console.log(tye_)
+						var fileList = $('#add_img');
+					
+						if($(".add1").eq(0).val()=="" || $(".add1").eq(1).val()=="" || $(".add2").eq(0).val()=="" || $('#add_img').val()==""){
+							alert("文字封面信息和视频不能为空")
+							return false;
+                        }
+                        
+						var imgUrl="../img/"+fileList[0].name;
+						//这里的思路应该是把this.addDetail传给服务端，然后加载列表this.newsList
+						//this.newsList.push(this.addDetail)
+						// this.newsList.push({
+						// 	title: this.addDetail.title,
+						// 	user: this.addDetail.user,
+						// 	text: this.addDetail.text,
+                        //     img:save,
+                        //     vedio:this.addDetail.vedio,
+                        //     limitTime:this.adddetail.limitTime,
+                        //     type:tye_,
+						// 	id:document.querySelectorAll("tbody tr").length+1
+						// })
+
+
+                        $("body").append("<div class='zzjz'>正在上传...</div>");
+
+
+						var fileList2 = $('#add_img')[0].files;
+           						
+                                   var formData = new FormData();
+                                   if(id_){
+                                    console.log(id_)
+                                   }else{
+                                       id_=0;
+                                       console.log(id_)
+                                   }
+                                    
+								   formData.append('singleFile', fileList2[0]);
+								   formData.append('id',id_);
+								   formData.append('user', this.addDetail.user);
+								   formData.append('title', this.addDetail.title);
+                                   formData.append('text', this.addDetail.text);
+                                   formData.append('weight',$(".quanzhong").val());
+                                   formData.append('vedio', $("#VIDEO2").val());
+                                   formData.append('isLink', 1);
+                                   formData.append('img', $(".lianjie").val());
+                                //    if($("#videoAdd").show()){
+
+                                //    }else{
+                                //         formData.append('vedio', this.addDetail.vedio);
+                                //    }
+                                   
+                                   formData.append('limitTime', this.addDetail.limitTime);
+                                   formData.append('type', tye_);
+                                   console.log(fileList2);
+                                   
+                                   
+
+									$.ajax({
+									   url: 'http://192.168.1.186:8093/addData',
+									   type:'post',
+									   processData:false,
+                                       contentType:false,
+                                       cache:false,
+									   async: false,
+									//    dataType:"json",
+                                       data: formData,
+                                       xhr: function(){
+											var xhr = $.ajaxSettings.xhr();
+											if(onprogress && xhr.upload) {
+                                                xhr.upload.addEventListener("progress" , onprogress, false);
+                                                console.log("sd")
+												return xhr;
+											}
+										},
+									   success: function(data){
+                                           console.log(data)
+                                           if(!$("#videoAdd").val() || $("#videoAdd").val()==""){
+                                                window.location.reload();
+                                           }
+                                           
+									   },error:function(data){
+										   console.log(data)
+									   }
+                                   })
+                                   
+                                   
+                                   if($("#videoAdd").val()){
+                                       setTimeout(function(){
+                                        var fileList3 = $('#videoAdd')[0].files;
+           						
+								   var formData2 = new FormData();
+   
+                                   formData2.append('singleFile', fileList3[0]);
+                                   if(id_){
+                                    console.log(id_)
+                                   }else{
+                                       id_=0;
+                                       console.log(id_)
+                                   }
+								   formData2.append('index', id_)
+								   $.ajax({
+									   url: 'http://192.168.1.186:8093/upload/video',
+									   type:'post',
+									   data: formData2,
+									   processData:false,
+									   contentType:false,
+                                       cache:false,
+                                    //    async: false,
+                                       xhr: function(){
+                                          
+											var xhr = $.ajaxSettings.xhr();
+											if(onprogress && xhr.upload) {
+												xhr.upload.addEventListener("progress" , onprogress2, false);
+												return xhr;
+											}
+										},
+									   success: function(data){
+                                        //    alert("上传成功");
+                                        window.location.reload();
+                                            // axios
+                                            // .get('http://192.168.1.186:8093/data', { params: { "dataDase": "test", "table": "Sino" } })
+                                            // .then(response => (
+                                            // this.newsList = response.data,
+                                            // id_=response.data.length))
+									   },error:function(data){
+										   console.log(data)
+									   }
+                                   })
+                                       },300)
+                                                                    
+                                   
+                                }
+								   function onprogress(evt){
+                                       console.log("ddd")
+										var loaded = evt.loaded;     //已经上传大小情况
+										var tot = evt.total;      //附件总大小
+										var per = Math.floor(100*loaded/tot);  //已经上传的百分比
+										$("#son").html("");
+                                        $("#son").html("上传进度"+per +"%" );
+                                        $("#son").css({"width":per+"%"})
+                                        console.log(per)
+                                        if(per>=100){
+                                            // window.location.reload();
+                                        }
+                                    }
+                                    
+                                    function onprogress2(evt){
+                                    //    console.log("ddd")
+										var loaded = evt.loaded;     //已经上传大小情况
+										var tot = evt.total;      //附件总大小
+										var per = Math.floor(100*loaded/tot);  //已经上传的百分比
+										$("#son2").html("");
+                                        $("#son2").html("上传进度"+per +"%" );
+                                        $("#son2").css({"width":per+"%"})
+                                        // console.log(per)
+                                        if(per>=100){
+                                            // window.location.reload();
+                                        }
+									}
+                                
+
+                                	   
+						// return false;
+
+					},
+        }
+    })
+</script>
+<script>
+$.ajax({
+    url:"http://192.168.1.186:8093/data",
+    data:{"dataDase":"sino","table":"type_list"},
+    type:"get",
+    success:function(data){
+        var html="";
+        for(var i=0;i<data.length;i++){
+           html+= `<option value="`+data[i].type+`" data-num="`+data[i].id+`">`+data[i].type+`</option>`
+        }
+        $(".leixing").html(html)
+        
+    }
+})
+    // 返回
+    function fh() {
+
+        window.location.href = 'update.html';
+
+    }
+   
+    $(".lianjie").click(function () {
+        $(".bendi").removeClass("click");
+        $(".lianjie").addClass("click");
+        $(".videolianjie").show();
+        $("#videoAdd").hide();
+        $("#videoAdd").val("");
+    })
+    $(".bendi").click(function () {
+        $(".lianjie").removeClass("click");
+        $(".bendi").addClass("click");
+        $(".videolianjie").val("");
+        $(".videolianjie").hide();
+        $("#videoAdd").show();
+    })
+</script>
+<script>
+	// 将左侧菜单页面请求过来
+	$.ajax({
+		url: "../common/leftmenu.html",
+		type: "get",
+		success: function (data) {
+			// console.log(data)
+			$(".left_abc").html(data)
+			// console.log(data)
+		}
+	})
+	// 将顶部导航页面请求过来
+	$.ajax({
+		url: "../common/daohang.html",
+		type: "get",
+		success: function (data) {
+			// console.log(data)
+			$(".top_abc").html(data)
+			// console.log(data)
+		}
+	})
+</script>
+</html>

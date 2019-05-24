@@ -1,0 +1,145 @@
+<style>
+    .content a{
+        height: 210px !important;
+    }
+    .link img{
+        height: 140px !important;
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="../css/bus.css" />
+<link rel="stylesheet" type="text/css" href="../css/index.css" />
+<link rel="stylesheet" href="../css/swiper.min.css" />
+<div class="swiper-container">
+<div class="swiper-wrapper banner_">
+<!-- <div class="swiper-slide"><img src="../img/1.webp" /></div>
+<div class="swiper-slide"><img src="../img/2.webp" /></div>
+<div class="swiper-slide"><img src="../img/3.webp" /></div> -->
+</div>
+<!-- 如果需要分页器 -->
+<div class="swiper-pagination"></div>
+</div>
+<div class="content" style="margin-top: 25px;">
+<div class="part2 zzrb">
+<a href="indexdsj.html" class="link">
+    <img  src="../img/timg.gif" />
+    <div class="font">
+        <div onclick="window.open('indexdsj.html','_self')" class="p1">电视剧</div>
+    </div>
+</a>
+
+<a href="indexdy.html" class="link">
+    <img src="../img/timg2.gif" />
+    <div class="font">
+        <div onclick="window.open('indexdy.html','_self')" class="p1">电影</div>
+    </div>
+</a>
+
+<a href="index4.html?canshu=zy" class="link">
+    <img src="../img/timg3.gif" />
+    <div class="font">
+        <div onclick="window.open('index4.html?canshu=zy','_self')" class="p1">综艺</div>
+    </div>
+</a>
+
+<a href="indexdm.html" class="link">
+    <img src="../img/timg4.gif" />
+    <div class="font">
+        <div onclick="window.open('indexdm.html','_self')" class="p1">动漫</div>
+    </div>
+</a>
+</div>
+</div>
+<div class="foot_"></div>
+<div class="foot">
+<div class="ul">
+<div class="li">
+    <a href="#" class="shouye">
+        <img src="../img/new/shouye_selected@3x.png" />
+        <div class="selected">首页</div>
+    </a>
+</div>
+<div class="li">
+    <a href="#" class="chongzhi">
+        <img src="../img/new/chongzhi@3x.png" />
+        <div>充值</div>
+    </a>
+</div>
+<div class="li">
+    <a href="#" class="me">
+        <img src="../img/new/wode@3x.png" />
+        <div>我的</div>
+    </a>
+</div>
+</div>
+</div>
+<script src="../js/swiper.min.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script>if (typeof module === 'object') { window.jQuery = window.$ = module.exports; };</script>
+<script src="../js/cookie.js"></script>
+<script>
+// var mySwiper = new Swiper(".swiper-container", {
+//     // direction: 'vertical', // 垂直切换开启
+//     loop: true, // 循环模式选项
+//     autoplay: true,
+//     speed: 1000,
+//     // 如果需要分页器
+//     pagination: {
+//         el: ".swiper-pagination"
+//     }
+// });
+
+
+
+
+
+
+
+// 类型
+$.ajax({
+url:"http://192.168.1.186:8093/data",
+data:{"dataDase":"sino","table":"type_list"},
+type:"get",
+success: function (data) {
+var html=""
+for(var i=0;i<data.length;i++){
+html+=`<a href="index4.html?canshu=`+data[i].id+`&&vip=`+data[i].vip+`" class="link">
+    <img  src="`+data[i].img+`" />
+    <div class="font">
+        <div onclick="window.open('index4.html?canshu=`+data[i].id+`&&vip=`+data[i].vip+`','_self')" class="p1">`+data[i].type+`</div>
+    </div>
+</a>`
+}
+$(".zzrb").html(html)
+}, error: function (data) {
+console.log(data)
+}
+})
+
+//   banner
+$.ajax({
+url:"http://192.168.1.186:8093/data",
+data:{"dataDase":"sino","table":"bumber"},
+type:"get",
+success: function (data) {
+var html=""
+for(var i=0;i<data.length;i++){
+html+=`<div onclick="window.open('`+data[i].link+`','_self')" class="swiper-slide"><img title="`+data[i].title+`" src="`+data[i].imgaddr+`" /></div>`
+}
+$(".banner_").html(html)
+
+var mySwiper = new Swiper(".swiper-container", {
+// direction: 'vertical', // 垂直切换开启
+loop: true, // 循环模式选项
+autoplay: true,
+speed: 1000,
+// 如果需要分页器
+pagination: {
+el: ".swiper-pagination"
+}
+});
+}, error: function (data) {
+console.log(data)
+}
+})
+
+</script>

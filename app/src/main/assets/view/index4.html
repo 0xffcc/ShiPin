@@ -1,0 +1,359 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>首页</title>
+    <!-- 跑马灯链接 -->
+    <link rel="stylesheet" type="text/css" href="../css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css">
+    <link rel="stylesheet" href="../css/liMarquee.css">
+    <!--  -->
+    <link rel="stylesheet" type="text/css" href="../css/bus.css" />
+    <link rel="stylesheet" type="text/css" href="../css/index.css" />
+    <link rel="stylesheet" href="../css/swiper.min.css" />
+    <style>
+        .part2 .link:nth-of-type(even) {
+            float: none !important;
+        }
+
+        .part2 .link {
+            width: 100% !important;
+            /* height: 240px !important; */
+        }
+
+        .part2 .link img {
+            height: 200px !important;
+        }
+
+        .part2 .link {
+            float: none !important;
+        }
+
+        .font .p1 {
+            margin-top: 7px !important;
+        }
+
+        /* 导航栏 */
+        .dianshiju {
+            width: 100%;
+            height: 45px;
+            font-size: 18px;
+            text-align: center;
+            line-height: 45px;
+            letter-spacing: 2px;
+            margin-top: 20px;
+        }
+
+        .fhimg {
+            position: absolute;
+            width: 12px;
+            margin: 12px 10px;
+        }
+
+        /* 跑马灯 */
+        .str_wrap {
+            padding-left: 3em;
+            padding-right: 3em;
+            background: #fefefe;
+            /* height: 10em; */
+            line-height: 2em;
+            font-size: 1.2em;
+        }
+
+        .jq22-content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 0 !important;
+
+        }
+
+        .str_wrap {
+            background-color: rgba(0, 0, 0, 0.2) !important;
+        }
+    </style>
+</head>
+<script>
+    function getParam(paramName) {
+        paramValue = "", isFound = !1;
+        if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+            arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0;
+            while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++
+        }
+        return paramValue == "" && (paramValue = null), paramValue
+
+
+    }
+
+
+</script>
+
+<body>
+
+    <!-- 跑马灯 -->
+    <div class="jq22-container">
+        <div class="jq22-content">
+            <div class="str7 str_wrap"></div>
+        </div>
+    </div>
+
+    <script src="../js/jquery-2.1.4.min.js"></script>
+    <script src="../js/jquery.liMarquee.js"></script>
+    <script>
+        // var a =["此情可待成追忆，只是当时已惘然", "落花不是无情物，化作春泥更护花", "枯藤老树昏鸦，小桥流水人家"]
+    
+
+
+        $(window).load(function () {
+            $('.str7').liMarquee();
+        });
+        function filterByType(aim, type) {
+            return aim.filter(item => item.type == type)
+        }
+        $.ajax({
+        url: "http://192.168.1.186:8093/data",
+        data: {"dataDase":"sino","table":"message_push"},
+        type: "get",
+        success:function(data){
+            var canshu = getParam("canshu")
+            data = filterByType(data, canshu);
+            // console.log(data);
+            var html = ""
+            for (var i = 0; i < data.length; i++) {
+                html += ` 
+                 <span style='margin-left:`+$(window).width()+`px;' onclick="window.open('`+data[i].linkaddr+`','_self')">`+data[i].title+`</span>`
+            }
+            $(".str7").html(html)
+        }
+    })
+
+    </script>
+
+    <div class="dianshiju">
+        <img onclick="fh()" class="fhimg" src="../img/fh@3x.png"> <span id="til"></span>
+    </div>
+    <!-- 如果需要分页器 -->
+    <div class="swiper-pagination"></div>
+
+    <div class="content">
+        <div class="part2 zzrb">
+            <!-- <a href="play.html" class="link">
+                <img src="../img/timg.gif" />
+                <div class="font">
+                    <div onclick="window.open('.html','_self')" class="p1">《都挺好》</div>
+                </div>
+            </a>
+
+            <a href="play.html" class="link">
+                <img src="../img/timg2.gif" />
+                <div class="font">
+                    <div onclick="window.open('.html','_self')" class="p1">《陆贞传奇》</div>
+                </div>
+            </a>
+
+            <a href="play.html" class="link">
+                <img src="../img/timg3.gif" />
+                <div class="font">
+                    <div onclick="window.open('.html','_self')" class="p1">《仙剑奇侠传》</div>
+                </div>
+            </a>
+
+            <a href="play.html" class="link">
+                <img src="../img/timg4.gif" />
+                <div class="font">
+                    <div onclick="window.open('.html','_self')" class="p1">《都挺好》</div>
+                </div>
+            </a> -->
+        </div>
+    </div>
+
+    <div class="content" style=" display: none;   margin-top: -11px !important;">
+        <div class="part">
+            <div class="title"></div>
+        </div>
+        <div class="part2">
+            <!-- <a href="play.html" class="link">
+                <img src="../img/timg6.gif" />
+                <div class="font">
+                    <div onclick="window.open('.html','_self')" class="p1">《仙剑奇侠传》</div>
+                </div>
+            </a>
+
+            <a href="play.html" class="link">
+                <img src="../img/timg7.gif" />
+                <div class="font">
+                    <div onclick="window.open('.html','_self')" class="p1">《都挺好》</div>
+                </div>
+            </a>
+
+            <a href="play.html" class="link">
+                <img src="../img/timg8.gif" />
+                <div class="font">
+                    <div onclick="window.open('.html','_self')" class="p1">《仙剑奇侠传》</div>
+                </div>
+            </a>
+
+            <a href="play.html" class="link">
+                <img src="../img/timg.gif" />
+                <div class="font">
+                    <div onclick="window.open('.html','_self')" class="p1">《都挺好》</div>
+                </div>
+            </a>
+            <a href="play.html" class="link">
+                <img src="../img/timg2.gif" />
+                <div class="font">
+                    <div onclick="window.open('.html','_self')" class="p1">《陆贞传奇》</div>
+                </div>
+            </a>
+
+            <a href="play.html" class="link">
+                <img src="../img/timg6.gif" />
+                <div class="font">
+                    <div onclick="window.open('.html','_self')" class="p1">《仙剑奇侠传》</div>
+                </div>
+            </a><a href="play.html" class="link">
+                <img src="../img/timg5.gif" />
+                <div class="font">
+                    <div onclick="window.open('.html','_self')" class="p1">《都挺好》</div>
+                </div>
+            </a>
+
+            <a href="play.html" class="link">
+                <img src="../img/timg3.gif" />
+                <div class="font">
+                    <div onclick="window.open('.html','_self')" class="p1">《仙剑奇侠传》</div>
+                </div>
+            </a> -->
+        </div>
+    </div>
+    <div class="foot_"></div>
+    <div class="foot">
+        <div class="ul">
+            <div class="li">
+                <a href="index2.html" onclick="window.open('index2.html','_self')">
+                    <img src="../img/new/shouye_selected@3x.png" />
+                    <div class="selected">首页</div>
+                </a>
+            </div>
+            <div class="li">
+                <a href="chongZhi.html" onclick="window.open('chongZhi.html','_self')">
+                    <img src="../img/new/chongzhi@3x.png" />
+                    <div>充值</div>
+                </a>
+            </div>
+            <div class="li">
+                <a href="me.html" onclick="window.open('me.html','_self')">
+                    <img src="../img/new/wode@3x.png" />
+                    <div>我的</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../js/swiper.min.js"></script>
+<script>if (typeof module === 'object') { window.jQuery = window.$ = module.exports; };</script>
+<script src="../js/cookie.js"></script>
+<script>
+    var canshu = getParam("canshu")
+    var vip = getParam("vip");
+    console.log(vip)
+
+$("#til").html();
+    function fh() {
+        window.location.href = 'index2.html';
+    }
+
+    $.ajax({
+        url: "http://192.168.1.186:8093/data",
+        data: { "dataDase": "sino", "table": "type_list" },
+        type: "get",
+        success:function(data){
+            console.log(data);
+            parseInt(canshu);
+            for(var i=0;i<data.length;i++){
+                if(canshu==data[i].id){
+                    $("#til").html(data[i].type)
+                }
+            }
+        }
+    })
+
+    // 类型筛选,减轻服务器负担
+    function filterByType(aim, type) {
+        return aim.filter(item => item.type == type)
+    }
+    $.ajax({
+        url: "http://192.168.1.186:8093/data",
+        data: { "dataDase": "test", "table": "Sino" },
+        type: "get",
+        success: function (data) {
+            data = filterByType(data, canshu);
+
+            var compare = function (prop) {
+                return function (obj1, obj2) {
+                    var val1 = obj1[prop];
+                    var val2 = obj2[prop];if (val1 > val2) {
+                        return -1;
+                    } else if (val1 > val2) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }            
+                } 
+            }
+            data=data.sort(compare("weight"));
+            console.log(data)
+            var html = "";
+            for (var i = 0; i < data.length; i++) {
+                html += `<a href="play.html?canshu=` + canshu + `&&vip=` + vip + `&&id=` + data[i].id + `" onclick="window.open('play.html?canshu=` + canshu + `&&vip=` + vip + `&&id=` + data[i].id + `','_self')"  class="link">
+                    <img  src="`+ data[i].imgname + `" />
+                    <div class="font">
+                        <div class="p1">`+ data[i].title + `</div>
+                        <div class="p2">`+ data[i].text + `</div>
+                    </div>
+                </a>`
+            }
+            $(".zzrb").html(html)
+        }, error: function (data) {
+            console.log(data)
+        }
+    })
+					// axios
+					// .get('http://192.168.1.186:8093/data',{params:{"dataDase":"test","table":"Sino"}})
+					// .then(response => (
+					// 	this.newsList=filterByType(response.data,canshu) ,
+					// 		console.log(this.newsList)
+
+					// 	))
+
+                    // },
+                    
+
+                    $("body").on("click","a",function(){
+    var link = $(this).attr('href');
+
+    $('#div_view').attr('src', link);
+
+    var href = window.location.href;
+
+    window.location.href = href.substr(0, href.indexOf('#')) + '#' + link;
+    if($(this).hasClass("this_a")){
+
+    }else{
+        return false;
+    }
+
+    
+})
+</script>
+
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script src="../js/vue.min.js"></script>
+	<link rel="stylesheet" href="../css/newtable.css">
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<title>vip类型</title>
+	<style>
+		#table table {
+			width: 100%;
+			font-size: 14px;
+			border: 1px solid #eee
+		}
+
+		#table {
+			padding: 10px 10px;
+		}
+
+		table thead th {
+			background: #f5f5f5;
+			padding: 10px;
+			text-align: left;
+		}
+
+		table tbody td {
+			padding: 10px;
+			text-align: left;
+			border-bottom: 1px solid #eee;
+			border-right: 1px solid #eee;
+		}
+
+		table tbody td img {
+			width: 60px;
+			height: 60px;
+		}
+
+		table tbody td span {
+			margin: 0 10px;
+			cursor: pointer;
+		}
+
+		.delete {
+			color: red;
+		}
+
+		.edit {
+			color: #008cd5;
+		}
+
+		.add {
+			border: 1px solid #eee;
+			margin: 10px 0;
+			padding: 15px;
+		}
+
+		input {
+			border: 1px solid #ccc;
+			padding: 5px;
+			border-radius: 3px;
+			margin-right: 15px;
+		}
+
+		button {
+			background: #5b9bd1;
+			border: 0;
+			padding: 4px 15px;
+			border-radius: 3px;
+			color: #fff;
+		}
+
+		#mask {
+			background: rgba(0, 0, 0, .5);
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			z-index: 4;
+			top: 0;
+			left: 0;
+		}
+
+		.mask {
+			width: 300px;
+			height: 400px;
+			background: rgba(255, 255, 255, 1);
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			margin: auto;
+			z-index: 47;
+			border-radius: 5px;
+		}
+
+		.title {
+			padding: 10px;
+			border-bottom: 1px solid #eee;
+		}
+
+		.title span {
+			float: right;
+			cursor: pointer;
+		}
+
+		.content {
+			padding: 10px;
+		}
+
+		.content input {
+			width: 270px;
+			margin-bottom: 15px;
+		}
+
+		.zzjz {
+			position: fixed;
+			top: 0;
+			left: 0;
+			background: #000;
+			opacity: 0.3;
+			width: 100%;
+			height: 200%;
+			text-align: center;
+			line-height: 500px;
+			color: #fff;
+			font-size: 20px;
+		}
+
+		/* 隔行变色 */
+		#table tr:nth-child(even) {
+			background-color: #f3f4f6;
+		}
+
+		/* 标题 */
+		.biaoti {
+			font-size: 16px;
+			color: #5c9acf;
+		}
+
+		/* 表格文字颜色 */
+		.neirong {
+			color: #999999;
+		}
+
+		/* 搜索按钮 */
+		.sousuo {
+			float: right;
+        }
+        .add select{
+            height: 30px;
+            margin-right: 20px;
+            margin-left: 5px;
+        }
+	</style>
+</head>
+
+<body style="background-color:#e9ecf3;">
+	<!-- 头部 -->
+	<div class="top_abc">
+		
+	</div>
+	<!-- 左侧菜单栏 -->
+	<div class="left_abc">
+	</div>
+	<!-- 右边显示区域 -->
+	<div class="tablele" style="display:none;">
+		<div id="table">
+			<div class="add">
+				<div class="sousuo">
+					<input type="text" placeholder="请输入搜索内容">
+					<span class="glyphicon glyphicon-search"></span>
+				</div>
+                新增选择:<select class="ss">
+                        <option v-for="(item,index) in noShow" v-bind:value="item.type" v-bind:data-num='item.id'>{{item.type}}</option>
+                </select>
+                vip类型:<select class="vip_lx">
+                        <option value="年" data-num="1">年</option>
+                        <option value="季度" data-num="2">季度</option>
+                        <option value="月" data-num="3">月</option>
+                    </select>
+                <input type="text" v-model="addDetail.vipmoney" name="user" value="" placeholder="vip价格" />
+                <button @click="adddetail">新增</button>
+			</div>
+			<table cellpadding="0" cellspacing="0">
+				<thead class="biaoti">
+					<tr>
+						<th>序号</th>
+						<th>分类</th>
+						<th>vip类型</th>
+						<th>vip价格</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody class="neirong">
+					<tr v-for="(item,index) in newsList">
+						<td width="5%">{{index+1}}</td>
+						<td>{{item.type}}</td>
+						<td>{{item.viptype}}</td>
+						<td width="15%">{{item.vipmoney}}</td>
+						<td width="15%"><span @click="deletelist(item.id,index)" class="delete">删除</span><span
+								class="edit" @click="edit(item,index)">编辑</span></td>
+					</tr>
+				</tbody>
+			</table>
+			<div id="mask" v-if="editlist">
+				<div class="mask">
+					<div class="title">
+						编辑
+						<span @click="editlist=false">
+							X
+						</span>
+					</div>
+					<div class="content">
+                         vip类型:
+						<div style="margin-bottom:30px;">
+                           <select class="leixing" v-model="editDetail.viptype">
+                                <option value="年" data-num="1">年</option>
+                                <option value="季度" data-num="2">季度</option>
+                                <option value="月" data-num="3">月</option>
+                            </select>
+                        </div>
+						vip价格:<input type="text" v-model="editDetail.vipmoney" name="content" value="" placeholder="vip价格" />
+						<!-- <textarea v-model='editDetail.text'> </textarea> -->
+						<button @click="update">更新</button>
+						<button @click="editlist=false">取消</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="../js/jquery-2.1.4.min.js"></script>
+	<script src="../js/cookie.js"></script>
+	<script src="../js/axios.js"></script>
+	<script>
+		var user=localStorage.getItem("user");
+		var password=localStorage.getItem("password");
+		if(!user){
+			window.location.href="./login.html";
+		}
+
+		var save;
+		var editImg;
+		var editIndex;
+		var app = new Vue({
+			el: '#table',
+			data: {
+                addDetail: {},
+                noShow: {},
+				editlist: false,
+				editDetail: {},
+				src: '',
+				newsList: [{}],
+				editid: ''
+			},
+			created: function () {
+                // 类型筛选,减轻服务器负担
+				function filterByType(aim, type) {
+    			return aim.filter(item => item.showd == type)
+				}
+
+                var _this=this;
+				axios.get('http://192.168.1.186:8093/data', {
+					params: { "dataDase": "sino", "table": "type_list" }
+				})
+					.then(function (response) {
+						_this.newsList=filterByType(response.data,1)
+                        _this.noShow =filterByType(response.data,0)
+                        console.log(_this.newsList)
+                        console.log(_this.noShow)
+						for (var i = 0; i < _this.newsList.length; i++) {
+							if (_this.newsList[i].viptype == 1) {
+								_this.newsList[i].viptype = "年";
+							} else if(_this.newsList[i].viptype==2) {
+								_this.newsList[i].viptype = "季度";
+							}else if(_this.newsList[i].viptype==3) {
+								_this.newsList[i].viptype = "月";
+							}
+						}
+						console.log(_this.newsList)
+					})
+					.catch(function (error) {
+						console.log(error);
+					});
+                $(".tablele").show();
+            },
+			mounted() {
+			
+			},
+
+			methods: {
+				// 图片
+				imgAdd() {
+					
+				},
+				imgEdit(index) {
+					
+				},
+				//新增
+				adddetail() {
+                    if(!this.addDetail.vipmoney){
+                        alert("不能留空")
+                        return false;
+                    }
+                    var _add={
+                        vipmoney: this.addDetail.vipmoney,
+                        viptype:$(".vip_lx option:selected").val(),
+                        id:$(".ss option:selected").data("num"),
+                        type:$(".ss option:selected").val()
+                    }
+                    this.newsList.push(_add)
+
+                    $.ajax({
+                        url: 'http://192.168.1.186:8093/vipType/editAdd',
+                        type: 'get',
+                        dataType: "json",
+                        data: {
+							vipmoney: this.addDetail.vipmoney,
+							viptype:$(".vip_lx option:selected").data("num"),
+							id:$(".ss option:selected").data("num"),
+                    },
+                        success: function (data) {
+                            console.log(data)
+                            window.location.reload();
+                        }, error: function (data) {
+                            console.log(data)
+                        }
+                    })
+
+
+				},
+				//删除
+				deletelist(id, i) {
+					console.log(id)
+						//这边可以传id给服务端进行删除  ID = id
+						$.ajax({
+						url: 'http://192.168.1.186:8093/vipType/del_',
+						type: 'get',
+						dataType: "json",
+						data:{
+                            id: id
+                        },
+						success: function (data) {
+							console.log(data)
+							window.location.reload();
+						}, error: function (data) {
+							console.log(data)
+						}
+					})
+
+						this.newsList.splice(i, 1);
+				},
+				//编辑
+				edit(item, index) {
+					editIndex = index;
+					this.editDetail = {
+						type: item.type,
+						viptype:item.viptype,
+						vipmoney: item.vipmoney,
+						id: item.id,
+					}
+					this.editlist = true;
+					this.editid = item.id;
+					// editIndex=item.id;
+
+				},
+				//确认更新
+				update() {
+                    var tye_=$(".leixing option:selected").data("num");
+                        console.log(tye_)
+					//编辑的话，也是传id去服务端
+					//axios.get('url',{ID:id}).then((res) =>{
+					//			加载列表				
+					//})
+					console.log(editIndex + "a")
+					if (editImg == undefined || editImg == "undefined") {
+
+						editImg = this.newsList[editIndex].img;
+					}//else if(){
+					// 	editImg="";
+					// }
+					let _this = this
+
+                    _this.newsList[editIndex].type= _this.editDetail.type;
+                    _this.newsList[editIndex].viptype=_this.editDetail.viptype;
+                    _this.newsList[editIndex].id=_this.editDetail.id;
+                    _this.newsList[editIndex].vipmoney=_this.editDetail.vipmoney;
+
+						// type: _this.editDetail.type,
+						// viptype: _this.editDetail.viptype,
+						// vipmoney: _this.editDetail.vipmoney,
+						// id: this.editid
+					
+					this.editlist = false
+					console.log(_this.newsList[editIndex])
+					$.ajax({
+						url: 'http://192.168.1.186:8093/vipType/edit',
+						type: 'get',
+						dataType: "json",
+						data:{
+                            type: _this.editDetail.type,
+                            viptype: tye_,
+                            vipmoney: _this.editDetail.vipmoney,
+                            id: _this.editid
+                        },
+						success: function (data) {
+							console.log(data)
+							window.location.reload();
+						}, error: function (data) {
+							console.log(data)
+						}
+					})
+
+				}
+			}
+		})
+		// 跳转
+		function tz() {
+
+			window.location.href = 'addnews.html';
+
+		}
+	</script>
+</body>
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script>
+	// 首页
+	$(".shouye").click(function () {
+		$(".sy").fadeToggle();
+		//   $("#div2").fadeToggle("slow");
+		//   $("#div3").fadeToggle(3000);
+	});
+	// 上传
+	$(".shangchuan").click(function () {
+		$(".sc").fadeToggle();
+		//   $("#div2").fadeToggle("slow");
+		//   $("#div3").fadeToggle(3000);
+	});
+	// 屏幕宽度小于1200时的上传
+	$(".up").click(function () {
+		$(".sc").fadeToggle();
+		//   $("#div2").fadeToggle("slow");
+		//   $("#div3").fadeToggle(3000);
+	});
+	// 用户信息
+	$(".user").click(function () {
+		$(".yh").fadeToggle();
+		//   $("#div2").fadeToggle("slow");
+		//   $("#div3").fadeToggle(3000);
+	});
+	// VIP信息
+	$(".vip").click(function () {
+		$(".hy").fadeToggle();
+		//   $("#div2").fadeToggle("slow");
+		//   $("#div3").fadeToggle(3000);
+	});
+
+
+
+	// 将左侧菜单页面请求过来
+	$.ajax({
+		url: "../common/leftmenu.html",
+		type: "get",
+		success: function (data) {
+			// console.log(data)
+			$(".left_abc").html(data)
+			// console.log(data)
+		}
+	})
+	// 将顶部导航页面请求过来
+	$.ajax({
+		url: "../common/daohang.html",
+		type: "get",
+		success: function (data) {
+			// console.log(data)
+			$(".top_abc").html(data)
+			// console.log(data)
+		}
+	})
+</script>
+
+
+</html>

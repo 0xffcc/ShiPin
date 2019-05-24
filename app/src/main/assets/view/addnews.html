@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="../css/newtable.css">
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="../js/vue.min.js"></script>
+    <link rel="stylesheet" href="../css/add.css">
+    <title>消息推送添加页面</title>
+    <style>
+        input,textarea{
+                padding-left: 10px;
+            }
+    </style>
+</head>
+
+<body>
+      <!-- 头部 -->
+      <div class="top_abc">
+        </div>
+        <!-- 左边菜单栏 -->
+        <div class="left_abc">
+              </div>
+              <!-- 显示区域 -->
+              <div class="right_abc">
+                    <div class="biankuang">
+                        <p class="biaoti">消息推送</p>
+                        <div class="tablele">
+                            <div id="table">
+                                <div class="add">
+                                    <input type="text" v-model="addDetail.title" name="title" value="" placeholder="标题" />
+                                    <input type="text" v-model="addDetail.text" name="user" value="" placeholder="内容" />
+                                    <!-- <textarea name="text" value="" placeholder="文本" v-model="addDetail.text" /></textarea> -->
+                                    <input type="date" v-model="addDetail.time_interval" name="user" value="" placeholder="时间区间" />
+                                    <input type="text" v-model="addDetail.linkaddr" placeholder="链接" />
+                                    <!-- <input type="file" accept="image/*" v-model="addDetail.src" name="multerFile" class="multerFile" multiple
+                                        @change='imgAdd' id="add_img"> -->
+                                    <!-- <input type="file" accept="video/*" v-model="addDetail.src" name="multerFile" class="multerFile"
+                                        multiple @change='imgAdd' id="add_img"> -->
+                                    <select class="leixing">
+                                    
+                                    </select>
+                                    <button onclick="fh()" class="bnt2" @click="adddetail">返回</button>
+                                    <button class="bnt1" @click="adddetail">新增</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+              </div>
+</body>
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/cookie.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+        var user=localStorage.getItem("user");
+		var password=localStorage.getItem("password");
+		if(!user){
+			window.location.href="./login.html";
+		}
+
+    var save;
+    var editImg;
+    var editIndex;
+    var app = new Vue({
+        el: '#table',
+        data: {
+            addDetail: {},
+            editlist: false,
+            editDetail: {},
+            src: '',
+            newsList: [],
+            editid: ''
+        },
+        created: function () {
+
+            axios.get('http://192.168.1.186:8093/data',{params:{"dataDase":"sino","table":"message_push"}})
+					.then(response => (
+						this.newsList=response.data))
+        },
+
+        mounted() {
+            // axios
+            // 	.get('http://192.168.1.186:8093/data')
+            // 	.then(response => (this.newsList=response.data))
+            // // }
+            // var m=this;
+            // 	console.log(this)
+            // 	$.ajax({
+            // 		url:"http://192.168.1.186:1000/data",
+            // 		type: "GET",
+            // 		dataType:"json",
+            // 		context: this, // 把vue实例传过去或者使用箭头函数
+            // 		success: function(res){
+            // 		// console.log(res[1]);
+            // 		this.newsList=res;
+            // 		console.log(this.newsList);
+            // 		},error:function(data){
+            // 			console.log(data)
+            // 		}
+            // 	})
+        },
+
+        methods: {
+            // 图片
+            imgAdd() {
+                var oFReader = new FileReader();
+                var file = document.getElementById('add_img').files[0];
+                oFReader.readAsDataURL(file);
+                oFReader.onloadend = function (oFRevent) {
+                    // $('img').attr('src',src);
+
+                    $("body").append("<div class='zzjz'>正在加载...</div>");
+                    setTimeout(function () {
+                        $(".zzjz").remove();
+                        save = oFRevent.target.result;
+                    }, 500)
+
+                }
+                console.log(this.data.newsList)
+            },
+            imgEdit(index) {
+                var oFReader2 = new FileReader();
+                var file2 = document.getElementById('edit_img').files[0];
+                oFReader2.readAsDataURL(file2);
+                oFReader2.onloadend = function (oFRevent) {
+                    // $('img').attr('src',src);
+
+                    $("body").append("<div class='zzjz'>正在加载...</div>");
+                    setTimeout(function () {
+                        $(".zzjz").remove();
+                        editImg = oFRevent.target.result;
+                    }, 500)
+
+                }
+            },
+            //新增
+            adddetail() {
+
+                //这里的思路应该是把this.addDetail传给服务端，然后加载列表this.newsList
+                //this.newsList.push(this.addDetail)
+                var add_obj={
+                    title: this.addDetail.title,
+                    text: this.addDetail.text,
+                    time_interval: this.addDetail.time_interval,
+                    linkaddr: this.addDetail.linkaddr,
+                    id: this.newsList.length+1,
+                    type:$(".leixing option:selected").data("num")
+                }
+                this.newsList.push(add_obj)
+
+
+                $.ajax({
+                    url: 'http://192.168.1.186:8093/upload/message',
+                    type: 'get',
+                    dataType: "json",
+                    data: add_obj,
+                    success: function (data) {
+                        console.log(data)
+                        window.location.reload();
+                    }, error: function (data) {
+                        console.log(data)
+                    }
+                })
+                // axios.get('192.168.1.145:8080/',{"a":1}).then((res) =>{
+                // // 若返回正确结果，清空新增输入框的数据
+                // // this.addDetail.title = ""
+                // // this.addDetail.user = ""
+                // // this.addDetail.text = ""
+                // console.log("成功")
+                // })
+
+
+            },
+            //删除
+            deletelist(id, i) {
+                this.newsList.splice(i, 1);
+                //这边可以传id给服务端进行删除  ID = id
+                //axios.get('url',{ID:id}).then((res) =>{
+                //			加载列表				
+                //})
+                // $.ajax({
+                // 	url:"login.html",
+                // 	// url:"192.168.1.145:8080/?index=1",
+                // 	type:"get",
+                // 	success:function(data){
+                // 		console.log(data)
+                // 	},
+                // 	error:function(data){
+                // 		console.log(data)
+                // 	}
+                // })
+            },
+            //编辑
+            edit(item, index) {
+                editIndex = index;
+                this.editDetail = {
+                    title: item.title,
+                    user: item.user,
+                    text: item.text,
+                    id: item.id,
+                    img: item.img
+                }
+                this.editlist = true
+                this.editid = item.id
+                editImg = item.img;
+                // editIndex=item.id;
+
+            },
+            //确认更新
+            update() {
+                //编辑的话，也是传id去服务端
+                //axios.get('url',{ID:id}).then((res) =>{
+                //			加载列表				
+                //})
+                console.log(editIndex + "a")
+                if (editImg == undefined || editImg == "undefined") {
+
+                    editImg = this.newsList[editIndex].img;
+                }//else if(){
+                // 	editImg="";
+                // }
+                let _this = this
+
+                _this.newsList[editIndex] = {
+                    title: _this.editDetail.title,
+                    user: _this.editDetail.user,
+                    text: _this.editDetail.text,
+                    img: editImg,
+                    id: this.editid
+                }
+                this.editlist = false
+
+
+                var fileList = $('#edit_img')[0].files;
+
+                var formData = new FormData();
+
+                formData.append('singleFile', fileList[0]);
+                formData.append('index', editIndex);
+                formData.append('user', _this.user);
+                formData.append('title', _this.title);
+                formData.append('text', _this.text);
+                console.log(fileList);
+                $.ajax({
+                    url: 'http://192.168.1.186:8093/upload/single',
+                    type: 'post',
+                    processData: false,
+                    contentType: false,
+                    dataType: "json",
+                    data: formData,
+                    success: function (data) {
+                        console.log(data)
+                        window.location.reload();
+                    }, error: function (data) {
+                        console.log(data)
+                    }
+                })
+
+            }
+        }
+    })
+</script>
+<script>
+
+    // 返回
+    function fh() {
+
+        window.location.href = 'news.html';
+
+    }
+    $.ajax({
+        url:"http://192.168.1.186:8093/data",
+        data:{"dataDase":"sino","table":"type_list"},
+        type:"get",
+        success:function(data){
+            var html="";
+            for(var i=0;i<data.length;i++){
+            html+= `<option value="`+data[i].type+`" data-num="`+data[i].id+`">`+data[i].type+`</option>`
+            }
+            $(".leixing").html(html)
+            
+        }
+    })
+    	// 将左侧菜单页面请求过来
+	$.ajax({
+		url: "../common/leftmenu.html",
+		type: "get",
+		success: function (data) {
+			// console.log(data)
+			$(".left_abc").html(data)
+			// console.log(data)
+		}
+	})
+	// 将顶部导航页面请求过来
+	$.ajax({
+		url: "../common/daohang.html",
+		type: "get",
+		success: function (data) {
+			// console.log(data)
+			$(".top_abc").html(data)
+			// console.log(data)
+		}
+	})
+</script>
+
+</html>

@@ -1,0 +1,353 @@
+/* 全局样式 */
+
+body{
+    /* background-color: #e9ecf3; */
+    /* background-color:pink; */
+    margin: 0;
+    padding: 0;
+}
+body,html{
+    width: 100%;
+    height: 100%;
+}
+ul,li{
+    list-style: none;
+}
+/* 左侧菜单栏 */
+.left-menu{
+    border: 1px solid #e9ecf3;
+    /* width: 12%; */
+    /* height: 600px; */
+    margin: 1% 0 0 2%;
+    background-color: white;
+    border-radius: 15px;
+    float: left;
+    width: 200px;
+}
+.left-menu li{
+    /* border: 1px solid yellow; */
+    height: 55px;
+    line-height: 55px;
+    margin-left: -25.5%;
+    color: #72818b;
+    font-size: 18px;
+}
+.left-menu li span{
+    padding-right: 7%;
+    padding-left: 10%;
+
+}
+.left-menu li:hover{
+    /* background-color: #5c9acf; */
+    background-color: #f2f6f9;
+    color: #5c9acf;
+    /* border-left: 3px solid #5c9acf; */
+}
+.left-menu a:hover{
+text-decoration: none;
+}
+.left-menu .shouye{
+    margin-top: 15%;
+}
+.left-menu .vip{
+    margin-bottom: 15%;
+}
+/* 屏幕宽度小于500px */
+@media screen and (max-width:660px){
+    .leftmenu-two li{
+        width: 108px !important;
+    }
+}
+/* 屏幕小于1200px时的左侧菜单栏 */
+.leftmenu-two{
+    /* border: 1px solid red; */
+    background-color: white;
+    width: 100%;
+    height: 50px;
+    font-size: 15px;
+    display: none;
+    margin-top: 10px;
+}
+/* 动态a标签 */
+#navtwo_ a{
+    float: none !important;
+}
+/* #navtwo_下的第一个li标签 */
+#navtwo_ li:first-child{
+    margin-top: -21px;
+}
+.leftmenu-two a{
+    /* border: 1px solid pink; */
+    /* width: 110px; */
+    /* display: block; */
+    float: left;
+}
+.leftmenu-two a:hover{
+    text-decoration: none;
+}
+.leftmenu-two li{
+    /* display: inline; */
+    /* width: 120px; */
+    height: 50px;
+    color: #999999;
+    text-align: center;
+    line-height: 50px;
+    
+    letter-spacing: 4px;
+}
+.leftmenu-two li:hover{
+    background-color:#f2f6f9; 
+    color: #5c9acf;
+}
+/* 左侧菜单栏媒体查询 */
+@media screen and (max-width:1200px){
+    .leftmenu-two{
+        display: block;
+    }
+    .left-menu{
+        display: none;
+    }
+    .tablele{
+        width: 98% !important;
+    }
+    .left_abc{
+        width: auto !important;
+    }
+}
+/* 下拉菜单 */
+ .sy{
+    display: none;
+    padding-left: 27%;
+} .sc{
+    display: none;
+    padding-left: 27%;
+} .yh{
+    display: none;
+    padding-left: 27%;
+} .hy{
+    display: none;
+    padding-left: 27%;
+}
+/* 右边显示区域 */
+.tablele{
+    width: 80%;
+    /* height: 800px; */
+    background-color: white;
+    float: left;
+    margin-top: 1.2%;
+    margin-left: 1%;
+}
+/* 顶部 */
+.top{
+    background-color: white;
+    height: 70px;
+}
+/* 顶部logo */
+.logo{
+    width: 150px;
+    height: 70px;
+    /* border: 2px solid; */
+    margin-left: 3%;
+    position: absolute;
+    /* margin-top: 5px; */
+    float: left;
+}
+.logo img{
+    width: 100%;
+    height: 100%;
+}
+.top li{
+        /* display: inline; */
+        height: 100%;
+        /* border: 1px solid yellow; */
+        /* float: left; */
+        /* width: 19%; */
+        display: inline-block;
+        align-items: center;
+        justify-content: center;
+        display: -webkit-flex;
+        letter-spacing: 4px;
+        font-size: 15px;
+        width: 120px;
+        float: right;
+}
+.top li:hover{
+    color: #5c9acf;
+}
+/* 顶部右边 */
+.right{
+    float: right;
+    color: #9f9fa0;
+    height: 100%;
+    width: 80%;
+}
+/* 媒体查询 */
+@media screen and (max-width:760px){
+    .top li{
+        width: 64px;
+        font-size: 12px;
+    }
+}
+.right li:hover{
+    background-color: #f2f6f9;
+}
+/* 消息 */
+.glyphicon-comment:before{
+    content: "\e111";
+    position: relative;
+    top: 3px;
+}
+/* 提醒 */
+.glyphicon-bell::before{
+    content: "\e111";
+    position: relative;
+    top: 3px;
+}
+/* 开启全屏 */
+.glyphicon-fullscreen::before{
+    content: "\e111";
+    position: relative;
+    top: 2px;
+}
+/* 进度 */
+.glyphicon-calendar::before{
+    content: "\e111";
+    position: relative;
+    top: 2px;
+}
+/* 新增金额、新增用户 */
+.newmoney{
+    width: 49%;
+    float: left;
+    /* height: 400px; */
+    border: 2px solid #5c9acf;
+    margin-top: 3%;
+    /* padding: 50px; */
+    margin-bottom: 3%;
+    position: relative;
+}
+.newuser{
+    width: 49%;
+    float: right;
+    /* height: 400px; */
+    border: 2px solid #5c9acf;
+    margin-top: 3%;
+    /* padding: 50px; */
+    margin-bottom: 3%;
+    position: relative;
+
+}
+.houtaisy{
+    width: 98%;
+    /* border: 1px solid red; */
+    margin: 0 auto;
+    height: 500px;
+}
+/* 后台首页 右边p标签 */
+.houtaisy p{
+    font-size: 17px;
+    letter-spacing: 2px;
+    color: #5c9acf;
+    /* text-align: center; */
+    margin-top: 27px;
+    margin-left: 16%;
+}
+/* 表 */
+#table1{
+    margin-left: 14%;
+    margin-bottom: 4%;
+}
+#table2{
+    margin-left: 14%;
+    margin-bottom: 4%;
+}
+/* newtable页面表格里的筛选时间 */
+.shaixuantime{
+    border: 1px solid #5c9acf;
+    position: absolute;
+    /* margin: -141px 538px; */
+    height: 30px;
+    /* padding: 4px; */
+    top: 23px;
+    right: 25px;
+}
+.shaixuantimetwo,.shaixuanzf{
+    border: 1px solid #5c9acf;
+    position: absolute;
+    /* margin: -141px 538px; */
+    height: 30px;
+    /* padding: 4px; */
+    top: 23px;
+    right: 25px;
+}
+.left_abc{
+    border: 1px solid #e9ecf3;
+    /* width: 12%; */
+    /* height: 600px; */
+    margin: 1% 0 0 2%;
+    background-color: white;
+    border-radius: 15px;
+    float: left;
+    width: 200px;
+}
+
+/* 屏幕小于1200时表格的标题*/
+@media screen and (max-width:1200px) {
+    .biaoti{
+        font-size:14px !important;
+    }
+    .leftmenu-two a{
+        /* width: 110px !important; */
+        margin-left: 1px;
+    }
+    .leftmenu-two li{
+        /* width: 110px !important; */
+        text-align: none !important;
+        padding: 0 10px 0 10px;
+        font-size: 14px !important;
+        }
+}
+/* 选择日期 */
+@media screen and (max-width:1200px) {
+    .newmoney {
+        width: 75% !important;
+        float: none !important;
+        margin: 10px auto !important;
+    }
+
+    .newuser {
+        width: 75% !important;
+        float: none !important;
+        margin: 10px auto !important;
+    }
+
+    .houtaisy {
+        height: auto !important;
+    }
+}
+
+.xiala {
+    position: absolute;
+    top: 61px;
+    right: 25px;
+    width: 172px;
+    height: 30px;
+    border: 1px solid #5b9bd1;
+}
+
+.riqi {
+    position: absolute;
+    top: 25px;
+    right: 194px;
+    font-size: 16px;
+}
+
+.fw {
+    position: absolute;
+    top: 67px;
+    right: 194px;
+    font-size: 16px;
+}
+.top_abc{
+    height: 70px;
+}

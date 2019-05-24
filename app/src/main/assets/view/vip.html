@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script src="../js/vue.min.js"></script>
+	<link rel="stylesheet" href="../css/newtable.css">
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- Data Table-->
+    <link rel="stylesheet" type="text/css" href="../css/datatables.min.css"/>
+
+    <!-- Bootstrap extend-->
+    <link rel="stylesheet" href="../css/bootstrap-extend.css">
+
+    <!-- theme style -->
+    <link rel="stylesheet" href="../css/master_style.css">
+	<title>订单列表</title>
+	<style>
+		#table table {
+			width: 100%;
+			font-size: 14px;
+			border: 1px solid #eee
+		}
+
+		#table {
+			padding: 10px 10px;
+		}
+
+		table thead th {
+			background: #f5f5f5;
+			padding: 10px;
+			text-align: left;
+		}
+
+		table tbody td {
+			padding: 10px;
+			text-align: left;
+			border-bottom: 1px solid #eee;
+			border-right: 1px solid #eee;
+		}
+
+		table tbody td img {
+			width: 60px;
+			height: 60px;
+		}
+
+		table tbody td span {
+			margin: 0 10px;
+			cursor: pointer;
+		}
+
+		.delete {
+			color: red;
+		}
+
+		.edit {
+			color: #008cd5;
+		}
+
+		.add {
+			border: 1px solid #eee;
+			margin: 10px 0;
+			padding: 15px;
+		}
+
+		input {
+			border: 1px solid #ccc;
+			padding: 5px;
+			border-radius: 3px;
+			margin-right: 15px;
+		}
+
+		button {
+			background: #5b9bd1;
+			border: 0;
+			padding: 4px 15px;
+			border-radius: 3px;
+			color: #fff;
+		}
+
+		#mask {
+			background: rgba(0, 0, 0, .5);
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			z-index: 4;
+			top: 0;
+			left: 0;
+		}
+
+		.mask {
+			width: 300px;
+			height: 400px;
+			background: rgba(255, 255, 255, 1);
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			margin: auto;
+			z-index: 47;
+			border-radius: 5px;
+		}
+
+		.title {
+			padding: 10px;
+			border-bottom: 1px solid #eee;
+		}
+
+		.title span {
+			float: right;
+			cursor: pointer;
+		}
+
+		.content {
+			padding: 10px;
+		}
+
+		.content input {
+			width: 270px;
+			margin-bottom: 15px;
+		}
+
+		.zzjz {
+			position: fixed;
+			top: 0;
+			left: 0;
+			background: #000;
+			opacity: 0.3;
+			width: 100%;
+			height: 200%;
+			text-align: center;
+			line-height: 500px;
+			color: #fff;
+			font-size: 20px;
+		}
+
+		/* 隔行变色 */
+		#table tr:nth-child(even) {
+			background-color: #f3f4f6;
+		}
+
+		/* 标题 */
+		.biaoti {
+			font-size: 16px;
+			color: #5c9acf;
+		}
+
+		/* 表格文字颜色 */
+		.neirong {
+			color: #999999;
+		}
+
+		/* 搜索按钮 */
+		.sousuo {
+			float: right;
+		}
+	</style>
+</head>
+
+<body style="background-color:#e9ecf3;">
+	<!-- 头部 -->
+	<div class="top_abc">
+			</div>
+	<div class="left_abc">
+		<!-- 左边菜单栏 -->
+		
+	</div>
+	<!-- 右边显示区域 -->
+	<div class="tablele" style="display:none;">
+		<div id="table">
+			<div class="add">
+				<div class="sousuo">
+					<!-- <input type="text" placeholder="请输入搜索内容"> -->
+					<!-- <span class="glyphicon glyphicon-search"></span> -->
+				</div>
+				<div style="clear:both"></div>
+				<!-- <input type="text" v-model="addDetail.title" name="title" value="" placeholder="标题" />
+                    <input type="text" v-model="addDetail.user" name="user" value="" placeholder="发布人" />
+                    <textarea name="text" value="" placeholder="文本" v-model="addDetail.text" /></textarea>
+                    <input style="float:left;" type="file" v-model="addDetail.src" name="multerFile" class="multerFile"  multiple  @change='imgAdd' id="add_img"> -->
+				<!-- <button @click="adddetail" onclick="tz()">新增</button> -->
+			</div>
+			<table cellpadding="0" cellspacing="0" id="example5">
+				<thead class="biaoti">
+					<tr>
+						<th>订单ID</th>
+						<th>订单编号</th>
+						<th>用户账号</th>
+						<th>充值时间</th>
+						<!-- <th>到期时间</th> -->
+						<th>会员类型</th>
+						<th>支付渠道</th>
+						<th>支付地址</th>
+						<th>金额</th>
+						<th>状态</th>
+						<th style="display:none;">操作</th>
+					</tr>
+				</thead>
+				<tbody class="neirong">
+			
+				</tbody>
+				<tfoot>
+				<tr>
+					<th>订单ID</th>
+					<th>订单编号</th>
+					<th>用户账号</th>
+					<th>充值时间</th>
+					<!-- <th>到期时间</th> -->
+					<th>会员类型</th>
+					<th>支付渠道</th>
+					<th>支付地址</th>
+					<th>金额</th>
+					<th>状态</th>
+				</tr>
+				</tfoot>
+			</table>
+			<div id="mask" v-if="editlist">
+				<div class="mask">
+					<div class="title">
+						编辑
+						<span @click="editlist=false">
+							X
+						</span>
+					</div>
+					<div class="content">
+						<input type="text" v-model="editDetail.title" name="title" value="" placeholder="标题" />
+						<input type="text" v-model="editDetail.user" name="user" value="" placeholder="发布人" />
+						<input type="date" v-model="editDetail.dates" name="date" value="" placeholder="发布时间" />
+						<input id="edit_img" type="file" name="multerFile" class="multerFile" :data-img="editDetail.img"
+							multiple @change='imgEdit' :data-index="editDetail.index">
+						<input type="text" v-model="editDetail.img" name="img">
+						<button @click="update">更新</button>
+						<button @click="editlist=false">取消</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="../js/jquery-2.1.4.min.js"></script>
+	<script src="../js/cookie.js"></script>
+	<script src="../js/axios.js"></script>
+	<script src="../js/jquery-ui.js"></script>
+	<script>
+			// $.widget.bridge('uibutton', $.ui.button);
+		</script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/datatables.min.js"></script>
+	<!-- 弹窗插件 -->
+	<link href="../css/sweetalert.css" rel="stylesheet" type="text/css">
+	<script src="../js/sweetalert.min.js"></script>
+	<script>
+		var user=localStorage.getItem("user");
+		var password=localStorage.getItem("password");
+		if(!user){
+			window.location.href="./login.html";
+		}
+
+		var save;
+		var editImg;
+		var editIndex;
+		var app = new Vue({
+			el: '#table',
+			data: {
+				addDetail: {},
+				editlist: false,
+				editDetail: {},
+				src: '',
+				newsList: [],
+				editid: ''
+			},
+			created: function () {
+			$('#example5 tfoot th').each( function () {
+				var title = $(this).text();
+				if(title){
+					$(this).html( '<input type="text" class="my-5" placeholder="搜索'+title+'" />' );
+					$.widget.bridge('uibutton', $.ui.button);
+				}
+			} );
+			
+		},
+		mounted: function () {
+					
+				var _this=this;
+				
+				
+
+				$.ajax({
+				url: 'http://192.168.1.186:8093/data',
+				type: 'get',
+				dataType: "json",
+				async: false,
+				data: { "dataDase": "sino", "table": "order_list" },
+				success: function (data) {
+					for (var i = 0; i < data.length; i++) {
+							if (data[i].status == 1) {
+								data[i].status = "已支付";
+							} else{
+								data[i].status = "未支付";
+							}
+						}
+						_this.newsList = data;
+					tableSearchInit(_this)
+					$(".tablele").show();
+				}
+			})
+				},
+		
+			methods: {
+				// 图片
+				imgAdd() {
+					var oFReader = new FileReader();
+					var file = document.getElementById('add_img').files[0];
+					oFReader.readAsDataURL(file);
+					oFReader.onloadend = function (oFRevent) {
+						// $('img').attr('src',src);
+
+						$("body").append("<div class='zzjz'>正在加载...</div>");
+						setTimeout(function () {
+							$(".zzjz").remove();
+							save = oFRevent.target.result;
+						}, 500)
+
+					}
+				},
+				imgEdit(index) {
+					var oFReader2 = new FileReader();
+					var file2 = document.getElementById('edit_img').files[0];
+					oFReader2.readAsDataURL(file2);
+					oFReader2.onloadend = function (oFRevent) {
+						// $('img').attr('src',src);
+
+						$("body").append("<div class='zzjz'>正在加载...</div>");
+						setTimeout(function () {
+							$(".zzjz").remove();
+							editImg = oFRevent.target.result;
+						}, 500)
+
+					}
+				},
+				//新增
+				adddetail() {
+
+					var fileList = $('#add_img');
+					var imgUrl = "../img/" + fileList[0].name;
+					//这里的思路应该是把this.addDetail传给服务端，然后加载列表this.newsList
+					//this.newsList.push(this.addDetail)
+					this.newsList.push({
+						title: this.addDetail.title,
+						user: this.addDetail.user,
+						dates: this.addDetail.dates,
+						img: save,
+						id: Math.floor(Math.random() * 1000000 + 1)
+					})
+
+					// axios.get('192.168.1.145:8080/',{"a":1}).then((res) =>{
+					// // 若返回正确结果，清空新增输入框的数据
+					// // this.addDetail.title = ""
+					// // this.addDetail.user = ""
+					// // this.addDetail.dates = ""
+					// console.log("成功")
+					// })
+
+
+				},
+				//删除
+				deletelist(id, i) {
+					this.newsList.splice(i, 1);
+					$.ajax({
+					url: 'http://192.168.1.186:8093/delData',
+					data: {
+						id: id,
+						database: "sino",
+						table: "order_list"
+					},
+					type: 'get',
+					success: function (data) {
+						console.log("删除成功")
+						window.location.reload();
+					}, error: function (data) {
+						console.log("删除失败")
+					}
+				})
+				},
+				//编辑
+				edit(item, index) {
+					editIndex = index;
+					this.editDetail = {
+						title: item.title,
+						user: item.user,
+						dates: item.dates,
+						id: item.id,
+						img: item.img
+					}
+					this.editlist = true
+					this.editid = item.id
+
+				},
+				//确认更新
+				update() {
+					//编辑的话，也是传id去服务端
+					//axios.get('url',{ID:id}).then((res) =>{
+					//			加载列表				
+					//})
+					let _this = this
+
+					console.log(editIndex)
+					_this.newsList[editIndex] = {
+						title: _this.editDetail.title,
+						user: _this.editDetail.user,
+						dates: _this.editDetail.dates,
+						img: editImg,
+						id: this.editid
+					}
+					this.editlist = false
+
+
+
+					var fileList = $('#edit_img')[0].files;
+
+					var formData = new FormData();
+
+					formData.append('singleFile', fileList[0]);
+					formData.append('index', editIndex);
+					console.log(formData);
+					$.ajax({
+						url: 'http://192.168.1.186:8093/upload/single',
+						type: 'post',
+						processData: false,
+						contentType: false,
+						dataType: "json",
+						data: formData,
+						success: function (data) {
+							console.log(data)
+						}, error: function (data) {
+							console.log(data)
+						}
+					})
+
+				}
+			}
+		})
+
+		function tableSearchInit(app) {
+		console.log(app)
+		var i;
+		table = $('#example5').DataTable({
+                data:app.newsList,
+                columns: [
+					{ 
+						data: function (row, type, set, meta) {
+                        return meta.row+1
+                    }
+					},
+                    { data: 'OrderNumber' },					
+                    { data: 'UserAccount' },
+                    { data: 'RechargeTime' },
+                    // { data: 'ExpireTime'   },
+                    {data: 'VipType'  },
+                    { data: 'PayChannel' },
+                    { data: 'PayAddr' },
+					{ data: 'Money' },
+					{ data: 'status' },
+                ],
+                language: {
+                    "sProcessing": "处理中...",
+                    "sLengthMenu": "显示 _MENU_ 项结果",
+                    "sZeroRecords": "没有匹配结果",
+                    "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                    "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                    "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                    "sInfoPostFix": "",
+                    "sSearch": "搜索:",
+                    "sUrl": "",
+                    "sEmptyTable": "表中数据为空",
+                    "sLoadingRecords": "载入中...",
+                    "sInfoThousands": ",",
+                    "oPaginate": {
+                        "sFirst": "首页",
+                        "sPrevious": "上页",
+                        "sNext": "下页",
+                        "sLast": "末页"
+                    },
+                    "oAria": {
+                        "sSortAscending": ": 以升序排列此列",
+                        "sSortDescending": ": 以降序排列此列"
+                    }
+                }
+            });
+            table.columns().every( function () {
+                var that = this;
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            });
+	}
+	</script>
+</body>
+<script>
+	
+
+
+
+	// 将左侧菜单页面请求过来
+	$.ajax({
+		url: "../common/leftmenu.html",
+		type: "get",
+		success: function (data) {
+			// console.log(data)
+			$(".left_abc").html(data)
+			// console.log(data)
+		}
+	})
+	// 将顶部导航页面请求过来
+	$.ajax({
+		url: "../common/daohang.html",
+		type: "get",
+		success: function (data) {
+			// console.log(data)
+			$(".top_abc").html(data)
+			// console.log(data)
+		}
+	})
+</script>
+
+</html>

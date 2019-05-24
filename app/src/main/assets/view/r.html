@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="single">
+        <div class="title">单个文件上传</div>
+        <input type="file" name="singleFile" id="singleFile">
+        <button class="submit">上传</button>
+    </div>
+
+    <div class="multer">
+        <div class="title">多个文件上传</div>
+        <input type="file" name="multerFile" id="multerFile" multiple>
+        <button class="submit">上传</button>
+    </div>
+
+
+    <script src="../js/jquery-2.1.4.min.js"></script>
+    <script>
+
+        $('.single .submit').on('click',function(){
+
+            var fileList = $('#singleFile')[0].files;
+            console.log(fileList);
+            var formData = new FormData();
+
+            formData.append('singleFile', fileList[0]);
+
+            $.ajax({
+                url: 'http://192.168.1.145:8080/uploadsingle',
+                type:'post',
+                dataType:"text",
+                processData:false,
+                contentType:false,
+                data: formData,
+                success: function(data){
+                    console.log(data)
+                },error:function(){
+                    console.log(32)
+                }
+            })
+        });
+
+
+        $('.multer .submit').on('click',function(){
+
+            var fileList = $('#multerFile')[0].files;
+            console.log(fileList);
+            var formData = new FormData();
+
+            for(let i = 0; i < fileList.length; i++){
+                formData.append('multerFile', fileList[i]);
+            }
+
+            $.ajax({
+                url: 'http://192.168.1.145:8080/uploadsingle',
+                type:'post',
+                dataType:"text",
+                processData:false,
+                contentType:false,
+                data: formData,
+                success: function(data){
+                    console.log(data)
+                },error:function(){
+                    console.log(32)
+                }
+            })
+        });
+
+        $.ajax({
+            url: 'http://192.168.1.186:8093/payBack',
+                type:'get',
+                data:{ 
+                bill_no: '20190524101317340537618999',
+                pay_type: '4',
+                bill_fee: '3000',
+                feeResult: '0',
+                sign: '067072D456D851C04715E69A218263D0' 
+            },
+                success: function(data){
+                    console.log(JSON.parse(data))
+                    
+                },error:function(){
+                    console.log(32)
+                }
+            })
+
+            // var b = new Base64();
+            // var str2='B5BDD5929A5DE4BE76DA5821A7DBE102';
+            // var str2 = b.decode(str2)
+            // console.log(str2)
+            // window.location.href="http://foundjoy.ltd/games/gamePlatform/view/"
+    </script>
+</body>
+</html>

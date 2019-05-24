@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../images/favicon.ico">
+    <!-- <link rel="stylesheet" href="static/css/shouYe.css"> -->
+    <title>后台管理系统</title>
+
+    <!-- Bootstrap 4.0-->
+    <link rel="stylesheet" href="static/css/bootstrap.css">
+
+    <!-- Data Table-->
+    <link rel="stylesheet" type="text/css" href="static/css/datatables.min.css" />
+
+    <!-- Bootstrap extend-->
+    <link rel="stylesheet" href="static/css/bootstrap-extend.css">
+
+    <!-- theme style -->
+    <link rel="stylesheet" href="static/css/master_style.css">
+
+    <!-- Fab Admin skins -->
+    <link rel="stylesheet" href="static/css/_all-skins.css">
+
+    <!-- Morris charts -->
+    <link rel="stylesheet" href="static/css/morris.css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="static/js/html5shiv.min.js"></script>
+    <script src="static/js/respond.min.js"></script>
+    <![endif]-->
+
+
+</head>
+
+<body class="hold-transition skin-blue-light sidebar-mini">
+<div class="wrapper">
+
+    <header class="main-header">
+        <my-logo></my-logo>
+        <my-nav></my-nav>
+    </header>
+
+    <!-- Left side column. contains the logo and sidebar -->
+    <aside class="main-sidebar">
+        <section class="sidebar" style="height: auto;"><ul data-widget="tree" class="sidebar-menu tree"><li class="user-profile treeview"><a href="index.html"><img src="static/picture/user5-128x128.jpg" alt="user"> <span>Juliya Brus</span> <span class="pull-right-container"><i class="fa fa-angle-right pull-right"></i></span></a> <ul class="treeview-menu"><li><a href="javascript:void()"><i class="fa fa-user mr-5"></i>My Profile </a></li> <li><a href="javascript:void()"><i class="fa fa-money mr-5"></i>My Balance</a></li> <li><a href="javascript:void()"><i class="fa fa-envelope-open mr-5"></i>Inbox</a></li> <li><a href="javascript:void()"><i class="fa fa-cog mr-5"></i>Account Setting</a></li> <li><a href="javascript:void()"><i class="fa fa-power-off mr-5"></i>Logout</a></li></ul></li> <li class="header nav-small-cap">PERSONAL</li> <li class="treeview"><a href="shouYe.html"><i class="fa fa-dashboard"></i> <span>首页</span> <span class="pull-right-container"><i class="fa fa-angle-right pull-right"></i></span></a></li> <li class="treeview active menu-open"><a href="#"><i class="fa fa-shopping-cart"></i> <span>游戏管理</span> <span class="pull-right-container"><i class="fa fa-angle-right pull-right"></i></span></a> <ul class="treeview-menu"><li class="active"><a href="gameList.html"><i class="fa fa-circle-thin"></i>游戏列表</a></li> <li><a href="pages/ecommerce/orders.html"><i class="fa fa-circle-thin"></i>推荐状态</a></li> <li><a href="pages/ecommerce/product-details.html"><i class="fa fa-circle-thin"></i>游戏分类</a></li> <li><a href="pages/ecommerce/product-edit.html"><i class="fa fa-circle-thin"></i>首页Banner管理</a></li></ul></li> <li class="treeview"><a href="#"><i class="fa fa-th"></i> <span>用户管理</span> <span class="pull-right-container"><i class="fa fa-angle-right pull-right"></i></span></a> <ul class="treeview-menu"><li><a href="pages/app/app-chat.html"><i class="fa fa-circle-thin"></i>Chat app</a></li> <li><a href="pages/app/app-contact.html"><i class="fa fa-circle-thin"></i>Contact / Employee</a></li> <li><a href="pages/app/app-ticket.html"><i class="fa fa-circle-thin"></i>Support Ticket</a></li> <li><a href="pages/app/calendar.html"><i class="fa fa-circle-thin"></i>Calendar</a></li> <li><a href="pages/app/profile.html"><i class="fa fa-circle-thin"></i>Profile</a></li> <li><a href="pages/app/userlist-grid.html"><i class="fa fa-circle-thin"></i>Userlist Grid</a></li> <li><a href="pages/app/userlist.html"><i class="fa fa-circle-thin"></i>Userlist</a></li></ul></li> <li class="treeview"><a href="#"><i class="fa fa-envelope"></i> <span>收入管理</span> <span class="pull-right-container"><i class="fa fa-angle-right pull-right"></i></span></a> <ul class="treeview-menu"><li><a href="pages/mailbox/mailbox.html"><i class="fa fa-circle-thin"></i>Inbox</a></li> <li><a href="pages/mailbox/compose.html"><i class="fa fa-circle-thin"></i>Compose</a></li> <li><a href="pages/mailbox/read-mail.html"><i class="fa fa-circle-thin"></i>Read</a></li></ul></li> <li class="treeview"><a href="#"><i class="fa fa-laptop"></i> <span>统计管理</span> <span class="pull-right-container"><i class="fa fa-angle-right pull-right"></i></span></a> <ul class="treeview-menu"><li><a href="pages/UI/badges.html"><i class="fa fa-circle-thin"></i>数据总览</a></li> <li><a href="pages/UI/border-utilities.html"><i class="fa fa-circle-thin"></i>游戏收入统计</a></li> <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-thin"></i>游戏用户注册统计</a></li> <li><a href="pages/UI/bootstrap-switch.html"><i class="fa fa-circle-thin"></i>ARPU分析</a></li> <li><a href="pages/UI/cards.html"><i class="fa fa-circle-thin"></i>游戏分析</a></li></ul></li> <li class="treeview"><a href="#"><i class="fa fa-bars"></i> <span>开发者管理</span> <span class="pull-right-container"><i class="fa fa-angle-right pull-right"></i></span></a> <ul class="treeview-menu"><li><a href="pages/widgets/blog.html"><i class="fa fa-circle-thin"></i>开发者列表</a></li> <li><a href="pages/widgets/chart.html"><i class="fa fa-circle-thin"></i>上传游戏列表</a></li> <li><a href="pages/widgets/list.html"><i class="fa fa-circle-thin"></i>子主题3</a></li></ul></li> <li class="treeview"><a href="#"><i class="fa fa-files-o"></i> <span>系统设置</span> <span class="pull-right-container"><i class="fa fa-angle-right pull-right"></i></span></a> <ul class="treeview-menu"><li><a href="pages/widgets/blog.html"><i class="fa fa-circle-thin"></i>logo上传</a></li> <li><a href="pages/widgets/chart.html"><i class="fa fa-circle-thin"></i>操作日志</a></li></ul></li></ul></section>
+        <div id="left-section">
+            <left-section first="management" second="gameList"></left-section>
+        </div>
+    </aside>
+    <!-- 右边显示区域 -->
+    <div class="content-wrapper">
+        <!-- 右边白条区域 -->
+        <section class="content-header">
+            <h1>
+                游戏列表
+            </h1>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#"><i class="fa fa-shopping-cart"></i> 游戏管理</a></li>
+                <li class="breadcrumb-item active">游戏列表</li>
+            </ol>
+        </section>
+
+        <!-- 内容区域 -->
+        <section class="content con_abc">
+            <div class="row" id="table">
+                <div class="col-12">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Individual column searching</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table id="example5" class="table table-bordered table-striped" style="width:100%">
+                                    <thead>
+                                    <tr>
+                                        <th>游戏ID</th>
+                                        <th>游戏名称</th>
+                                        <th>游戏类型</th>
+                                        <th>推荐状态</th>
+                                        <th>显示状态</th>
+                                        <th>人气</th>
+                                        <th>排序设置</th>
+                                        <th>开发者</th>
+                                        <th>操作</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item,index) in newsList">
+                                        <td>{{index+1}}</td>
+                                        <td>{{item.flname}}</td>
+                                        <td>{{item.yxlx}}</td>
+                                        <td>{{item.tjzt}}</td>
+                                        <td>{{item.xszt}}</td>
+                                        <td>{{item.rq}}</td>
+                                        <td>{{item.pxsz}}</td>
+                                        <td>{{item.kfz}}</td>
+                                        <td><span @click="deletelist(item.id,index)" class="delete">删除</span><span class="edit" @click="edit(item,index)">编辑</span></td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>游戏ID</th>
+                                        <th>游戏名称</th>
+                                        <th>游戏类型</th>
+                                        <th>推荐状态</th>
+                                        <th>显示状态</th>
+                                        <th>人气</th>
+                                        <th>排序设置</th>
+                                        <th>开发者</th>
+                                        <th></th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>
+<!-- jQuery 3 -->
+<script src="static/js/jquery.js"></script>
+<script src="static/js/vue.min.js"></script>
+<script src="static/js/component.js"></script>
+<script src="static/js/axios.js"></script>
+<script>
+    var myHead = new Vue({
+        el: '.main-header'
+    });
+    var leftSection = new Vue({
+        el: '#left-section'
+    });
+
+</script>
+<!-- jQuery UI 1.11.4 -->
+<script src="static/js/jquery-ui.js"></script>
+
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+   
+</script>
+
+<!-- Bootstrap 4.0-->
+<script src="static/js/bootstrap.js"></script>
+
+<!-- Slimscroll -->
+<script src="static/js/jquery.slimscroll.js"></script>
+
+<!-- FastClick -->
+<script src="static/js/fastclick.js"></script>
+
+<!-- Morris.js charts -->
+<script src="static/js/raphael.min.js"></script>
+<!--<script src="static/js/morris.min.js"></script>-->
+
+<!-- echarts -->
+<script src="static/js/echarts-en.min.js"></script>
+<script src="static/js/echarts-liquidfill.min.js"></script>
+
+<!-- This is data table -->
+<script src="static/js/datatables.min.js"></script>
+
+<!-- Sparkline -->
+<script src="static/js/jquery.sparkline.js"></script>
+
+<!-- Fab Admin App -->
+<script src="static/js/template.js"></script>
+
+<!-- Fab Admin dashboard demo (This is only for demo purposes) -->
+<!--<script src="static/js/dashboard.js"></script>-->
+
+<!-- Fab Admin for demo purposes -->
+<script src="static/js/demo.js"></script>
+
+
+</body>
+<script>
+    $(function () {
+
+        var save;
+        var editImg;
+        var editIndex;
+        var app = new Vue({
+            el: '#table',
+            data: {
+                addDetail: {},
+                editlist: false,
+                editDetail: {},
+                src: '',
+                newsList: [{
+                    flname: '植物大战僵尸',
+                    yxlx: '益智',
+                    tjzt: '推荐',
+                    xszt:'不隐藏',
+                    rq:'389',
+                    pxsz:'4',
+                    kfz:'小白',
+                },
+                    {
+                        flname: '泡泡大战',
+                        yxlx: '益智',
+                        tjzt: '推荐',
+                        xszt:'不隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'小白',
+                    },
+                    {
+                        flname: '绝地求生',
+                        yxlx: '射击',
+                        tjzt: '不推荐',
+                        xszt:'隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'大白',
+                    },
+                    {
+                        flname: '泡泡大战',
+                        yxlx: '益智',
+                        tjzt: '推荐',
+                        xszt:'不隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'小白',
+                    },
+                    {
+                        flname: '绝地求生',
+                        yxlx: '射击',
+                        tjzt: '不推荐',
+                        xszt:'隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'大白',
+                    },
+                    {
+                        flname: '泡泡大战',
+                        yxlx: '益智',
+                        tjzt: '推荐',
+                        xszt:'不隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'小白',
+                    },
+                    {
+                        flname: '泡泡大战',
+                        yxlx: '益智',
+                        tjzt: '推荐',
+                        xszt:'不隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'小白',
+                    },
+                    {
+                        flname: '泡泡大战',
+                        yxlx: '益智',
+                        tjzt: '推荐',
+                        xszt:'不隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'小白',
+                    },
+                    {
+                        flname: '泡泡大战',
+                        yxlx: '益智',
+                        tjzt: '推荐',
+                        xszt:'不隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'小白',
+                    },
+                    {
+                        flname: '泡泡大战',
+                        yxlx: '益智',
+                        tjzt: '推荐',
+                        xszt:'不隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'小白',
+                    },
+                    {
+                        flname: '泡泡大战',
+                        yxlx: '益智',
+                        tjzt: '推荐',
+                        xszt:'不隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'小白',
+                    },
+                    {
+                        flname: '泡泡大战',
+                        yxlx: '益智',
+                        tjzt: '推荐',
+                        xszt:'不隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'小白',
+                    },
+                    {
+                        flname: '泡泡大战',
+                        yxlx: '益智',
+                        tjzt: '推荐',
+                        xszt:'不隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'小白',
+                    },
+
+                    {
+                        flname: '绝地求生',
+                        yxlx: '射击',
+                        tjzt: '不推荐',
+                        xszt:'隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'大白',
+                    },
+                    {
+                        flname: '小鳄鱼爱洗澡',
+                        yxlx: '益智',
+                        tjzt: '推荐',
+                        xszt:'不隐藏',
+                        rq:'389',
+                        pxsz:'4',
+                        kfz:'小白',
+                    }],
+                editid: ''
+
+
+            },
+            created: function () {
+
+                // DataTable
+                
+
+                // Apply the search
+               
+            }
+
+        })
+    })
+
+$(function(){
+    var table = $('#example5').DataTable();
+    table.columns().every( function () {
+        $('#example5 tfoot th').each( function () {
+                    var title = $(this).text();
+                    $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+                    $.widget.bridge('uibutton', $.ui.button);
+                } );
+                    var that = this;
+
+                    $( 'input', this.footer() ).on( 'keyup change', function () {
+                        if ( that.search() !== this.value ) {
+                            that
+                                .search( this.value )
+                                .draw();
+                        }
+                    } );
+                } );
+})
+   
+</script>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/tuiguang.css">
+    <title>推广</title>
+    <style>
+        canvas{
+            /* margin-left: -25%; */
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="head">
+        <img src="../img/tuiguang/fanhui_02@3x.png" onclick="javascript:history.back(-1);">
+        推广</div>
+    <p class="p" style="margin-top:23px;">最新片源</p>
+    <p class="p">永久免费</p>
+    <p class="p">无广告</p>
+    <div class="erweima">
+        <div id="qrcode"></div>
+        <img id="imgOne" src="#" style="width:0;height:0;"/>
+    </div>
+    <p class="saomiao">扫描上方二维码下载APP</p>
+    <!-- <div class="xiazaiurl">
+        <span class="xiazai">下载地址：http://www.baidu.com</span>
+        <span class="fuzhi">复制</span>
+    </div> -->
+    <div style="width:80%;margin:0 auto;margin-top: 20px;margin-bottom: 10px;">
+        <div class="xiazaidizhi"> <div>下载地址：</div><div id="xiazaidizhi""></div>
+            <!-- <div class="xiazaidizhi_fuzhi" style="cursor:pointer;" id="id_copy" data-clipboard-target="#id_text"
+            data-clipboard-action="copy">复制</div> -->
+            <button class="xiazaidizhi_fuzhi" style="cursor:pointer;" id="id_copy" type="button" id="id_copy"
+            data-clipboard-target="#xiazaidizhi"
+            data-clipboard-action="copy">复制
+    </button>
+        </div>
+    </div>
+
+    <div class="bnt">保存二维码</div>
+    <p class="tixing">保存这张图片到本地，如遇到APP无法打开时</p>
+    <p class="tixing" style="margin-top:5px !important;">请扫描二维码或者输入官网地址重新下载APP</p>
+    
+  <a href="#" id="alink"></a>
+</body>
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/jquery.qrcode.min.js"></script>
+<script src="../js/clipboard.min.js"></script>
+
+<script>
+    
+    $("body").on("click","a",function(){
+    var link = $(this).attr('href');
+
+    $('#div_view').attr('src', link);
+
+    var href = window.location.href;
+
+    window.location.href = href.substr(0, href.indexOf('#')) + '#' + link;
+    if($(this).hasClass("this_a")){
+
+    }else{
+        return false;
+    }
+
+    
+})
+
+
+function getParam(paramName) { 
+    paramValue = "", isFound = !1; 
+    if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) { 
+        arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0; 
+        while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++ 
+    } 
+    return paramValue == "" && (paramValue = null), paramValue 
+} 
+
+var canshu=getParam("qd")
+var canshu2=getParam("qd")
+    if(canshu && canshu!="undefined"){
+
+    }else{
+      canshu="I1";
+    }
+
+    if(canshu2 && canshu2!="undefined"){
+
+    }else{
+      canshu2="A1";
+    }
+    
+    //   $("#Store").attr("href","d/豆芽视频-test-"+canshu+".mobileconfig")
+    //   $("#Android").attr("href","d/豆芽视频-test-"+canshu2+".apk")
+
+
+function toUtf8(str) {    
+    var out, i, len, c;    
+    out = "";    
+    len = str.length;    
+    for(i = 0; i < len; i++) {    
+        c = str.charCodeAt(i);    
+        if ((c >= 0x0001) && (c <= 0x007F)) {    
+            out += str.charAt(i);    
+        } else if (c > 0x07FF) {    
+            out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));    
+            out += String.fromCharCode(0x80 | ((c >>  6) & 0x3F));    
+            out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));    
+        } else {    
+            out += String.fromCharCode(0xC0 | ((c >>  6) & 0x1F));    
+            out += String.fromCharCode(0x80 | ((c >>  0) & 0x3F));    
+        }    
+    }    
+    return out;    
+} 
+
+
+    if(canshu.indexOf("I")!=-1){
+        var str = "http://192.168.1.186:8080/index/index.html?I="+canshu; 
+    }else if(canshu2.indexOf("A")!=-1){
+        var str = "http://192.168.1.186:8080/index/index.html?A="+canshu2; 
+    }
+    
+    $("#xiazaidizhi").html(str);
+    var qrcode=$('#qrcode').qrcode(str); 
+
+// var qrcode= $('#qrcode').qrcode(str).hide();   
+ var canvas=qrcode.find('canvas').get(0);  
+ $('#imgOne').attr('src',canvas.toDataURL('image/jpg'))  
+ $("#download1").attr("src",canvas.toDataURL('image/jpg'))
+
+$(".bnt").click(function(){
+  
+   
+
+    var alink = document.createElement("a");
+    alink.className="new_download";
+    // $(".new_download").attr("download","ewm");
+    alink.download="ewm";
+    alink.href = "http://192.168.1.186:8080/img/ewm.png";
+    console.log(alink)
+
+    alink.click();
+    // window.open("http://192.168.1.186:8080/img/ewm.png");
+
+})
+
+var clipboard = new ClipboardJS("#id_copy");
+$("#id_copy").click(function(){
+    alert("复制成功！快给朋友们分享吧！")
+})
+</script>
+</html>

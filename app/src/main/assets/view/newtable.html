@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=1200"> -->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../css/newtable.css">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>首页</title>
+    <style>
+        .qdtj{
+            width: 98%;
+            margin: 20px auto;
+        }
+        .qdtj td{
+            text-align: center;
+            border: 1px solid #5c9acf;
+            padding: 5px;
+        }
+        #table1,#table2{
+            width: 650px;
+            margin-left: 53px;
+            height:350px;
+        }
+        @media screen and (max-width:1750px){
+            #table1,#table2{
+                width: 550px !important;
+                margin-left: 53px !important;
+                height:330px !important;
+            }
+        }
+        @media screen and (max-width:1500px){
+            #table1,#table2{
+                width: 450px !important;
+                margin-left: 53px !important;
+                height:300px !important;
+            }
+        }
+        @media screen and (max-width: 1200px){
+                #table1,#table2{
+                width: 650px !important;
+                margin-left: 53px !important;
+                height:350px !important;
+            }
+        }
+
+    </style>
+</head>
+
+<body style="background-color:#e9ecf3;">
+    <!-- 头部 -->
+    <div class="top_abc">
+
+    </div>
+    <!-- 左边菜单栏 -->
+    <div class="left_abc">
+
+
+    </div>
+
+    <!-- 右边显示区域 -->
+    <!-- 表一 -->
+    <div class="tablele" style="display:none;">
+        <div class="houtaisy">
+            <div class="newmoney">
+                <p><span class="usx_day">今日</span>新增金额：￥<span class="today_m"></span></p>
+                <p><span class="usx_ysday">昨日</span>金额：￥<span class="yesterday_m"></span></p>
+                <p>总计金额：￥<span class="allMoney"></span></p>
+                <span class="riqi">日期：</span><input class="shaixuantime">
+                <!-- 日历 -->
+                <span class="fw">范围：</span>
+                <select class="xiala" id="xuan">
+                        <option data-num="1">过去7天</option>
+                        <option data-num="2">过去30天</option>
+                        <option data-num="3">过去90天</option>
+                    <!-- <option class="date4">上周</option>
+                    <option class="date5">上个月</option> -->
+                </select>
+                <div style="    margin: 10px 0 -45px 72px;">单位：元</div>
+                <!-- 给表准备容器 -->
+                <div id="table1"></div>
+
+                <div style="margin: -90px 10px 70px 650px;">日期</div>
+
+            </div>
+            <!-- 表二 -->
+            <div class="newuser">
+                <p><span class="usx_day2">今日</span>新增用户：<span class="today_u"></span> 人</p>
+                <p><span class="usx_ysday2">昨日</span>用户：<span class="yesterday_u"> 人</p>
+                <p>总用户：<span class="allUser"></span> 人</p>
+                <span class="riqi">日期：</span><input class="shaixuantimetwo">
+                <span class="fw">范围：</span>
+                <select class="xiala" id="xuan2">
+                        <option data-num="1">过去7天</option>
+                        <option data-num="2">过去30天</option>
+                        <option data-num="3">过去90天</option>
+                        <!-- <option class="date4">上周</option>
+                        <option class="date5">上个月</option> -->
+                </select>
+                <div style="    margin: 10px 0 -45px 72px;">单位：个</div>
+                <!-- 给表准备容器 -->
+                <div id="table2"></div>
+                <div style="margin: -90px 10px 70px 650px;">日期</div>
+            </div>
+        </div>
+        <div style="clear:both;"></div>
+        <table class="qdtj">
+            <tr>
+                <td>
+                    渠道名称
+                </td>
+                <td>
+                    渠道总用户
+                </td>
+                <td>
+                    渠道收入
+                </td>
+                <td>
+                    今日新增用户
+                </td>
+                <td>
+                    今日收入
+                </td>
+            </tr>
+        </table>
+        
+    </div>
+</body>
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/echarts .js"></script>
+<script src="../layDate-v5.0.9/laydate/laydate.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script src="../js/cookie.js"></script>
+<style>
+        .layui-laydate .layui-this {
+            background-color: #5c9acf!important;
+            color: #fff!important;
+        }
+    </style>
+<script>
+    var data0;
+    var Day_date=[];
+    var Day_money=[];
+    var Day_user=[];
+    var user=localStorage.getItem("user");
+		var password=localStorage.getItem("password");
+		if(!user){
+			window.location.href="./login.html";
+		}
+    //执行一个laydate实例 金额
+    laydate.render({
+        elem: '.shaixuantime', //指定元素
+        trigger: 'click',
+        done: function(value, date, endDate){
+            $.ajax({
+                url:"http://192.168.1.186:8093/index/date",
+                type:'get',
+                dataType:"json",
+                data:{value:value},
+                success:function(data){
+                    
+                    console.log(data)
+                    $(".usx_day").html("当日");
+                    $(".usx_ysday").html("前一日")
+                    $(".yesterday_m").html(data.yesterday.money);
+                    $(".today_m").html(data.money);
+                }
+            })
+            console.log(value)   
+        }
+        
+        // ,show:'true'
+    });
+    // 用户
+    laydate.render({
+        elem: '.shaixuantimetwo', //指定元素
+        trigger: 'click',
+        done: function(value, date, endDate){
+            $.ajax({
+                url:"http://192.168.1.186:8093/index/date",
+                type:'get',
+                dataType:"json",
+                data:{value:value},
+                success:function(data){
+                    console.log(data)
+                    $(".usx_day2").html("当日");
+                    $(".usx_ysday2").html("前一日")
+                    $(".yesterday_u").html(data.yesterday.usr_number);
+                    $(".today_u").html(data.usr_number);
+                }
+            })
+            console.log(value)   
+        }
+        // ,show:'true'
+    });
+    
+    $("#xuan").change(function(){
+        var num=$("#xuan").find("option:selected").data("num");
+            console.log(num)
+            Day_date=[];
+            Day_money=[];
+            Day_user=[];
+            if(num==1){
+                for(var i=0;i<data0.sevenDay.length;i++){
+                    Day_date.push(data0.sevenDay[i].s_date)
+                    Day_money.push(data0.sevenDay[i].money)
+                    Day_user.push(data0.sevenDay[i].usr_number)
+                    echarts_()
+                }
+            }else if(num==2){
+                for(var i=0;i<data0.monthDay.length;i++){
+                    Day_date.push(data0.monthDay[i].s_date)
+                    Day_money.push(data0.monthDay[i].money)
+                    Day_user.push(data0.monthDay[i].usr_number)
+                    echarts_()
+                }
+            }else if(num==3){
+                for(var i=0;i<data0.three_monthDay.length;i++){
+                    Day_date.push(data0.three_monthDay[i].s_date)
+                    Day_money.push(data0.three_monthDay[i].money)
+                    Day_user.push(data0.three_monthDay[i].usr_number)
+                    echarts_()
+                }
+            }
+            console.log(Day_date);
+            console.log(Day_money);
+        // }
+        
+    });
+    $("#xuan2").change(function(){
+        var num=$("#xuan2").find("option:selected").data("num");
+            console.log(num)
+            Day_date=[];
+            Day_money=[];
+            Day_user=[];
+            if(num==1){
+                for(var i=0;i<data0.sevenDay.length;i++){
+                    Day_date.push(data0.sevenDay[i].s_date)
+                    Day_money.push(data0.sevenDay[i].money)
+                    Day_user.push(data0.sevenDay[i].usr_number)
+                    echarts_2()
+                }
+            }else if(num==2){
+                for(var i=0;i<data0.monthDay.length;i++){
+                    Day_date.push(data0.monthDay[i].s_date)
+                    Day_money.push(data0.monthDay[i].money)
+                    Day_user.push(data0.monthDay[i].usr_number)
+                    echarts_2()
+                }
+            }else if(num==3){
+                for(var i=0;i<data0.three_monthDay.length;i++){
+                    Day_date.push(data0.three_monthDay[i].s_date)
+                    Day_money.push(data0.three_monthDay[i].money)
+                    Day_user.push(data0.three_monthDay[i].usr_number)
+                    echarts_2()
+                }
+            }
+            console.log(Day_date);
+            console.log(Day_money);
+        // }
+        
+    });
+
+    $.ajax({
+        url:"http://192.168.1.186:8093/index/data",
+        type:'get',
+        dataType:"json",
+        // async:false,
+        success:function(data){
+            console.log(data);
+            data0=data;
+            $(".allMoney").html(data.allMoney);
+            $(".yesterday_m").html(data.yesterday.money);
+            $(".today_m").html(data.today.money);
+            $(".allUser").html(data.allUser);
+            $(".yesterday_u").html(data.yesterday.usr_number);
+            $(".today_u").html(data.today.usr_number);
+            var html='';
+            for(var i=0;i<data.channel_obj.length;i++){
+                html+= `<tr>
+                <td>
+                        `+data.channel_obj[i].name+`
+                </td>
+                <td>
+                        `+data.channel_obj[i].user+`人
+                </td>
+                <td>
+                        ￥`+data.channel_obj[i].money+`
+                </td>
+                <td>
+                        `+data.channel_obj[i].todayUser+`人
+                </td>
+                <td>
+                        ￥`+data.channel_obj[i].todayMoney+`
+                </td>
+            </tr>`
+            }
+            for(var i=0;i<data.sevenDay.length;i++){
+                Day_date.push(data.sevenDay[i].s_date)
+                Day_money.push(data.sevenDay[i].money)
+                Day_user.push(data.sevenDay[i].usr_number)
+                // sevenDay
+            }
+            echarts_();
+            echarts_2();
+            $(".qdtj").append(html);
+        }
+    })
+</script>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('table1'));
+     // 表二
+     var myChart2 = echarts.init(document.getElementById('table2'));
+    
+
+    function echarts_(){
+        var option = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: []
+        },
+        grid: {
+            left: '3%',
+            right: '6%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: Day_date
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+
+            {
+                name: '金额',
+                type: 'line',
+                stack: '总量',
+                data: Day_money
+            }
+        ]
+    };
+    myChart.setOption(option);
+
+    
+    }
+
+    function echarts_2(){
+        var option = {
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: []
+        },
+        grid: {
+            left: '3%',
+            right: '6%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: Day_date
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+
+            {
+                name: '用户量',
+                type: 'line',
+                stack: '总量',
+                data: Day_user
+            }
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart2.setOption(option);
+    }
+
+    // 使用刚指定的配置项和数据显示图表。
+    
+    
+   
+</script>
+<script>
+    // 首页
+    $(".shouye").click(function () {
+        $(".sy").fadeToggle();
+        //   $("#div2").fadeToggle("slow");
+        //   $("#div3").fadeToggle(3000);
+    });
+    // 上传
+    $(".shangchuan").click(function () {
+        $(".sc").fadeToggle();
+        //   $("#div2").fadeToggle("slow");
+        //   $("#div3").fadeToggle(3000);
+    });
+    // 用户信息
+    $(".user").click(function () {
+        $(".yh").fadeToggle();
+        //   $("#div2").fadeToggle("slow");
+        //   $("#div3").fadeToggle(3000);
+    });
+    // VIP信息
+    $(".vip").click(function () {
+        $(".hy").fadeToggle();
+        //   $("#div2").fadeToggle("slow");
+        //   $("#div3").fadeToggle(3000);
+    });
+
+
+    var winW = document.body.clientWidth;
+    console.log(winW);
+    // 将左侧菜单页面请求过来
+    $.ajax({
+        url: "../common/leftmenu.html",
+        type: "get",
+        success: function (data) {
+            // console.log(data)
+            $(".left_abc").html(data)
+            // console.log(data)
+            $(".tablele").show()
+        }
+    })
+    // 将顶部导航页面请求过来
+    $.ajax({
+        url: "../common/daohang.html",
+        type: "get",
+        success: function (data) {
+            // console.log(data)
+            $(".top_abc").html(data)
+            // console.log(data)
+            $(".tablele").show()
+        }
+    })
+
+</script>
+
+</html>

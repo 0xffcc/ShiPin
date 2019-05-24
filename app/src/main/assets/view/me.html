@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>个人中心</title>
+    <link rel="stylesheet" type="text/css" href="../css/bus.css" />
+    <link rel="stylesheet" type="text/css" href="../css/index.css" />
+    <link rel="stylesheet" href="../css/swiper.min.css" />
+    <style>
+        .denglu {
+            background: rgba(70, 126, 249, 1);
+            border-radius: 14px;
+            padding-left: 40px !important;
+            padding-right: 40px !important;
+            margin-left: 15px;
+            display: none;
+        }
+
+        .me_head .p2 {
+            font-size: 18px;
+            display: none;
+        }
+
+        div,
+        button,
+        a,
+        img {
+            transition: 1s !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="me_head">
+        <div class="_nav">
+            个人中心
+            <div>
+                <img class="ico" src="../img/new/guanfangqun@3x.png" />
+            </div>
+            <!-- <div class="self_data">&nbsp;&nbsp;&nbsp;账号：<span class="user">1311087155</span></div> -->
+            <!-- <div class="self_data">账号：<span class="user">1311087155</span></div>
+            <div class="self_data">密码：<span class="password">187*******</span></div> -->
+            <div class="self_data p1">账号：<span class="user"></span></div>
+            <div class="self_data p1">密码：<span class="password"></span></div>
+            <div class="self_data p2">未登录</div>
+            <div class="btn">
+                <button class="new">生成新的账号密码</button>
+                <button class="quit">退出登录</button>
+                <button class="denglu">登录</button>
+            </div>
+        </div>
+    </div>
+    <div style="height:30px;"></div>
+    <div class="me_link">
+        <div class="me_link_li" onclick="window.open('chongZhi.html','_self')">
+            <img src="../img/new/zhifei@3x.png" />
+            资费标准
+            <div class="shu"></div>
+        </div>
+        <div class="me_link_li" id="fxLink">
+            <img src="../img/new/fenxiang@3x.png" />
+            分享链接
+            <div class="shu"></div>
+        </div>
+        <div class="me_link_li">
+            <img src="../img/new/guanfangqun@3x.png" />
+            官方YOTO群
+        </div>
+    </div>
+    <div class="all_pa">
+        
+    </div>
+
+    <div class="foot_"></div>
+    <div class="foot">
+        <div class="ul">
+            <div class="li">
+                    <a href="index2.html" onclick="window.open('index2.html','_self')">
+                    <img src="../img/new/shouye@3x.png" />
+                    <div>首页</div>
+                </a>
+            </div>
+            <div class="li">
+                <a href="chongZhi.html" onclick="window.open('chongZhi.html','_self')">
+                    <img src="../img/new/chongzhi@3x.png" />
+                    <div>充值</div>
+                </a>
+            </div>
+            <div class="li">
+                <a href="me.html" onclick="window.open('me.html','_self')">
+                    <img src="../img/new/wode_selected@3x.png" />
+                    <div class="selected">我的</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../js/swiper.min.js"></script>
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script>if (typeof module === 'object') { window.jQuery = window.$ = module.exports; };</script>
+<script src="../js/cookie.js"></script>
+<script>
+    var qudao=localStorage.getItem("qd");
+    var cf = [];
+    var more = [];
+    var cd = [];
+    //     // 取回
+    // document.getElementById("result").innerHTML = localStorage.getItem("lastname");
+    var user = localStorage.getItem("user");
+    var password = localStorage.getItem("password");
+    var arr_ = [];
+    var user_data;
+    if (user && user != "undefined") {
+        $(".user").html(user)
+        $(".password").html(password)
+    } else {
+        // window.location.href="./login2.html";
+        // $(".new").hide();
+        $(".quit").hide();
+        $(".me_head .p1").hide();
+        $(".denglu").show();
+        $(".me_head .p2").show();
+    }
+    function filterByType(aim, type) {
+        return aim.filter(item => item.showd == type)
+    }
+    $.ajax({
+        url: "http://192.168.1.186:8093/data",
+        data: { "dataDase": "sino", "table": "type_list" },
+        type: "get",
+        success: function (data) {
+            console.log(data)
+            data = filterByType(data, 1)
+            var html = ""
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < more.length; j++) {
+
+                    if (more[j].viptype == 1) {
+                        more[j].viptype = "年";
+                    } else if (data[i].viptype == 2) {
+                        more[j].viptype = "季度";
+                    } else if (data[i].viptype == 3) {
+                        more[j].viptype = "月";
+                    }
+                    if (data[i].id == more[j].num) {
+                        // console.log(more[j].viptype)
+                        html += `<div class="pa">
+                            <div class="con con_2 shadow c_K">
+                                <a href="javascript:;" class='this_a'>
+                                    <img class="xuanzew" src="../img/new/vip_selected@3x.png">
+                                    <img class="daoqi" src="../img/new/huiyuan@3x.png">
+                                    <div class="font_cz">
+                                        <span class="left">仅只观看`+ data[i].type + `节目</span>
+                                        <span class="right">
+                                            <span class="money">`+ data[i].vipmoney + `￥</span><span class="fenge">/</span>
+                                            <sapn class="time">`+ more[j].viptype + `</sapn>
+                                        </span>
+                                        <div class="rq">
+                                            到期时间：`+ more[j].viptype_expirtime + `
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="con pay" style="display:none;">
+                                <!--支付渠道:-->
+                                <button class="weixin" style="display:none;"><img src="../img/new/weixin_selected@3x.png" /> 微信</button>
+                                <button class="zhifubao" style="display:none;"><img src="../img/new/zhifubao_selected@3x.png" /> 支付宝</button>
+                            </div>
+                        </div>
+                            `
+                    }
+                }
+
+
+
+
+
+            }
+            // console.log(html)
+            $(".all_pa").html(html)
+
+            $(".pa .shadow").eq(0).trigger("click");
+            // console.log(html);
+            // $(".All_cz").html(html);
+            // $(".pa .shadow").eq(0).trigger("click");
+        }, error: function (data) {
+            console.log(data)
+        }
+    })
+
+    function filterByID(aim, type) {
+        return aim.filter(item => item.UserID == type)
+    }
+
+    $("#fxLink").click(function(){
+        window.location.href="tuiGuang.html?qd="+qudao;
+    })
+    $.ajax({
+        url: 'http://192.168.1.186:8093/data',
+        type: 'get',
+        dataType: "json",
+        async: false,
+        data: {
+            "dataDase": "sino", "table": "member_list"
+        },
+        success: function (data) {
+            data = filterByID(data, parseInt(localStorage.getItem("UserID")));
+            user_data = data;
+            console.log(data)
+            for (let i = 0; i < data.length; i++) {
+                let _that = data[i];
+                _that['vipList'] = [];
+                for (let key in _that) {
+                    // 如果key字段包含viptype_expirtime 且不为空
+                    if (key.indexOf('viptype_expirtime') >= 0 && _that[key]) {
+                        // arr_[i]=[];
+
+                        // vip类型
+                        let typeNum = key.replace('viptype_expirtime', '');
+
+                        // 组合然后push进vipList
+                        let _obj = {
+                            ['viptype']: parseInt(_that['viptype' + typeNum]),
+                            ['viptype_expirtime']: _that[key],
+                            ["num"]: parseInt(typeNum)
+                        }
+                        _that['vipList'].push(_obj)
+
+                    }
+                }
+                more = _that['vipList'];
+                console.log(more)
+
+            }
+        },
+        error: function (data) {
+
+        }
+    })
+
+    $(".new").click(function () {
+        $.MsgBox.Confirm("温馨提示", "您确认要生成账号密码吗？", addNum);
+        
+    })
+
+    $(".quit").click(function () {
+        localStorage.setItem("user", "");
+        localStorage.setItem("password", "");
+        localStorage.setItem("UserID", "");
+        window.location.href = "./login2.html";
+    })
+    $(".denglu").click(function () {
+        window.location.href = "./login2.html";
+    })
+
+    $(".btn button").click(function () {
+        //   alert("未连接服务器")
+    })
+    $(".pay button").click(function () {
+        // alert("未连接服务器")
+    })
+
+    $("body").on("click", ".pa .shadow", function () {
+        $(".shadow").addClass("con_2");
+        $(this).removeClass("con_2");
+        $(".shadow").find("a .xuanzew").attr("src", "../img/new/vip@3x.png");
+        $(this).find("a .xuanzew").attr("src", "../img/new/vip_selected@3x.png");
+        $(".pa .pay").hide();
+        $(this).parent().find(".pay").show();
+    })
+
+
+    function randomString(len) {
+        len = len || 32;
+        var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz012345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+        var maxPos = $chars.length;
+        var pwd = '';
+        for (i = 0; i < len; i++) {
+            pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        return pwd;
+    }
+    function randomNum(len) {
+        len = len || 32;
+        var $chars = '0123456789';
+        var maxPos = $chars.length;
+        var pwd = '';
+        for (i = 0; i < len; i++) {
+            pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+        }
+        for (var i = 0; i < cf.length; i++) {
+            // console.log(cf[i].Account)
+            // console.log(randomString())
+
+            // 为了账号不重复
+            if (pwd == cf[i].Account) {
+                return randomString();
+            } else {
+
+            }
+        }
+        return pwd;
+    }
+
+    // ios跳转
+$("body").on("click","a",function(){
+    var link = $(this).attr('href');
+
+    $('#div_view').attr('src', link);
+
+    var href = window.location.href;
+
+    window.location.href = href.substr(0, href.indexOf('#')) + '#' + link;
+    if($(this).hasClass("this_a")){
+
+    }else{
+        return false;
+    }
+
+    
+})
+
+function addNum() {
+    var useName = randomNum(10);
+        var passWord = randomString(10);
+        $(".quit").show();
+        $(".me_head .p1").show();
+        $(".denglu").hide();
+        $(".me_head .p2").hide();
+        $.ajax({
+            url: 'http://192.168.1.186:8093/user/add',
+            type: 'get',
+            dataType: "json",
+            data: {
+                useName: useName,
+                passWord: passWord,
+                qudao:qudao
+            },
+            success: function (data) {
+                
+                $(".user").html(useName);
+                $(".password").html(passWord);
+                localStorage.setItem("user", useName);
+                localStorage.setItem("password", passWord);
+                console.log(localStorage.getItem("user"))
+                $.ajax({
+                    url: "http://192.168.1.186:8093/login",
+                    data: {
+                        userName: localStorage.getItem("user"),
+                        passWord: localStorage.getItem("password"),
+                        login:"member_list"
+                    },
+                    type: "get",
+                    success: function (data) {
+                        console.log(data)
+                        localStorage.setItem("UserID", data[0].UserID);
+                        $.MsgBox.Confirm("温馨提示", "生成成功!");
+                        window.location.reload();
+
+                    }
+                })
+            }, error: function (data) {
+
+            }
+        })
+}
+
+(function() {
+    $.MsgBox = {
+        Alert: function(title, msg) {
+            GenerateHtml("alert", title, msg);
+            btnOk(); //alert只是弹出消息，因此没必要用到回调函数callback
+            btnNo();
+        },
+        Confirm: function(title, msg, callback) {
+            GenerateHtml("confirm", title, msg);
+            btnOk(callback);
+            btnNo();
+        }
+    }
+    //生成Html
+    var GenerateHtml = function(type, title, msg) {
+        var _html = "";
+        _html += '<div id="mb_box"></div><div id="mb_con"><span id="mb_tit">' + title + '</span>';
+        _html += '<a id="mb_ico">x</a><div id="mb_msg">' + msg + '</div><div id="mb_btnbox">';
+        if (type == "confirm") {
+            _html += '<input id="mb_btn_ok" type="button" value="确定" />';
+            _html += '<input id="mb_btn_no" type="button" value="取消" />';
+        }
+        _html += '</div></div>';
+        //必须先将_html添加到body，再设置Css样式
+        $("body").append(_html);
+        //生成Css
+        GenerateCss();
+    }
+
+    //生成Css
+    var GenerateCss = function() {
+        $("#mb_box").css({
+            width: '100%',
+            height: '100%',
+            zIndex: '99999',
+            position: 'fixed',
+            filter: 'Alpha(opacity=60)',
+            backgroundColor: 'black',
+            top: '0',
+            left: '0',
+            opacity: '0.6'
+        });
+        $("#mb_con").css({
+            zIndex: '999999',
+            width: '310px',
+            position: 'fixed',
+            backgroundColor: 'White',
+            borderRadius: '15px'
+        });
+        $("#mb_tit").css({
+            display: 'block',
+            fontSize: '14px',
+            color: '#444',
+            padding: '10px 15px',
+            backgroundColor: '#DDD',
+            borderRadius: '15px 15px 0 0',
+            borderBottom: '3px solid #009BFE',
+            fontWeight: 'bold'
+        });
+        $("#mb_msg").css({
+            padding: '20px',
+            lineHeight: '20px',
+            borderBottom: '1px dashed #DDD',
+            fontSize: '13px'
+        });
+        $("#mb_ico").css({
+            display: 'block',
+            position: 'absolute',
+            right: '10px',
+            top: '9px',
+            border: '1px solid Gray',
+            width: '18px',
+            height: '18px',
+            textAlign: 'center',
+            lineHeight: '16px',
+            cursor: 'pointer',
+            borderRadius: '12px',
+            fontFamily: '微软雅黑'
+        });
+        $("#mb_btnbox").css({
+            margin: '15px 0 10px 0',
+            textAlign: 'center'
+        });
+        $("#mb_btn_ok,#mb_btn_no").css({
+            width: '85px',
+            height: '30px',
+            color: 'white',
+            border: 'none'
+        });
+        $("#mb_btn_ok").css({
+            backgroundColor: '#467EF9'
+        });
+        $("#mb_btn_no").css({
+            backgroundColor: 'gray',
+            marginLeft: '20px'
+        });
+        //右上角关闭按钮hover样式
+        $("#mb_ico").hover(function() {
+            $(this).css({
+                backgroundColor: 'Red',
+                color: 'White'
+            });
+        }, function() {
+            $(this).css({
+                backgroundColor: '#DDD',
+                color: 'black'
+            });
+        });
+        var _widht = document.documentElement.clientWidth; //屏幕宽
+        var _height = document.documentElement.clientHeight; //屏幕高
+        var boxWidth = $("#mb_con").width();
+        var boxHeight = $("#mb_con").height();
+        //让提示框居中
+        $("#mb_con").css({
+            top: (_height - boxHeight) / 2 + "px",
+            left: (_widht - boxWidth) / 2 + "px"
+        });
+    }
+    //确定按钮事件
+    var btnOk = function(callback) {
+        $("#mb_btn_ok").click(function() {
+            $("#mb_box,#mb_con").remove();
+            if (typeof(callback) == 'function') {
+                callback();
+            }
+        });
+    }
+    //取消按钮事件
+    var btnNo = function() {
+        $("#mb_btn_no,#mb_ico").click(function() {
+            $("#mb_box,#mb_con").remove();
+        });
+    }
+})();
+</script>
+
+</html>

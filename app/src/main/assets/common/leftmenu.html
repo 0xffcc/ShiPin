@@ -1,0 +1,185 @@
+﻿<!-- 左边菜单栏 -->
+<style>
+    #nav_ {
+        text-decoration: none;
+    }
+</style>
+<ul class="left-menu" style="padding-bottom: 20px;">
+    <a target='_top' href="../view/newtable.html">
+        <li class="shouye"><span class="glyphicon glyphicon-home"></span>首页
+            <!-- <li class="sy">暂无</li>
+                            <li class="sy">暂无</li>
+                            <li class="sy">暂无</li> -->
+        </li>
+    </a>
+
+    <!-- 分类 -->
+    <a target='_top' href="../view/type.html">
+        <li><span class="glyphicon glyphicon-tags"></span>视频分类</li>
+    </a>
+
+    <!-- 上传 -->
+    <a target='_top' href="#">
+        <li class="shangchuan"><span class="glyphicon glyphicon-open"></span>上传视频
+
+
+        </li>
+        <span id="nav_">
+        </span>
+    </a>
+
+    <!-- 订单列表 -->
+    <a target='_top' href="../view/vip.html">
+        <li class="vip" style="margin-bottom:0;"><span class="glyphicon glyphicon-heart"></span>订单列表
+        </li>
+    </a>
+    <!-- 会员列表 -->
+    <a target='_top' href="../view/user2.html">
+        <li class="user"><span class="glyphicon glyphicon-user"></span>会员管理
+            <!-- <li class="yh">星期二</li>
+                    <li class="yh">星期二</li>
+                    <li class="yh">星期二</li> -->
+        </li>
+    </a>
+    <!-- banner管理 -->
+    <a target='_top' href="../view/banner.html">
+        <li><span class="glyphicon glyphicon-retweet"></span>banner管理</li>
+    </a>
+    <!-- 支付管理 -->
+    <a target='_top' href="../view/zhiFu.html">
+        <li><span class="glyphicon glyphicon-yen"></span>支付管理</li>
+    </a>
+    <a target='_top' href="../view/news.html">
+        <li><span class="glyphicon glyphicon-retweet"></span>消息推送</li>
+    </a>
+    <a target='_top' href="../view/logo.html">
+        <li><span class="glyphicon glyphicon-open"></span>logo</li>
+    </a>
+    <a target='_top' href="../view/vipType.html">
+        <li><span class="glyphicon glyphicon-user"></span>vip管理</li>
+    </a>
+    
+<!-- 渠道商管理 -->
+<a target='_top' href="../view/channel.html">
+    <li><span class="glyphicon glyphicon-yen"></span>渠道商管理</li>
+</a>
+
+</ul>
+<!-- 屏幕小于1200px时的左侧菜单栏 -->
+<ul class="leftmenu-two">
+    <a target='_top' href="../view/newtable.html">
+        <li class=""><span class="glyphicon glyphicon-home"></span>首页</li>
+    </a>
+    <a target='_top' href="#">
+        <li class="shangchuan"><span class="glyphicon glyphicon-open"></span>上传视频</li>
+        <span id="navtwo_"></span>
+        <a target='_top' href="../view/update.html">
+        </a>
+        <a target='_top' href="../view/type.html">
+            <li class=""><span class="glyphicon glyphicon-tags"></span>视频分类</li>
+        </a>
+        <a target='_top' href="../view/user.html">
+            <li class=""><span class="glyphicon glyphicon-user"></span>会员列表</li>
+        </a>
+        <a target='_top' href="../view/play.html">
+            <li class=""><span class="glyphicon glyphicon-yen"></span>支付管理</li>
+        </a>
+        <a target='_top' href="../view/vip.html">
+            <li class=""><span class="glyphicon glyphicon-heart"></span>订单列表</li>
+        </a>
+        <a target='_top' href="../view/banner.html">
+            <li class=""><span class="glyphicon glyphicon-heart"></span>banner管理</li>
+        </a>
+        <a target='_top' href="../view/logo.html">
+            <li class=""><span class="glyphicon glyphicon-heart"></span>logo</li>
+        </a>
+        <a target='_top' href="../view/vipType.html">
+            <li class=""><span class="glyphicon glyphicon-heart"></span>vip管理</li>
+        </a>
+        <a target='_top' href="../view/channel.html">
+            <li class=""><span class="glyphicon glyphicon-yen"></span>渠道商管理</li>
+        </a>
+</ul>
+<script src="../js/jquery-2.1.4.min.js"></script>
+<script>
+    // 首页
+    $(".shouye").click(function () {
+        $(".sy").fadeToggle();
+        //   $("#div2").fadeToggle("slow");
+        //   $("#div3").fadeToggle(3000);
+    });
+    // 上传
+    $(".shangchuan").click(function () {
+        $(".sc").fadeToggle();
+        //   $("#div2").fadeToggle("slow");
+        //   $("#div3").fadeToggle(3000);
+    });
+    // 屏幕宽度小于1200时的上传
+    $(".up").click(function () {
+        $(".sc").fadeToggle();
+        //   $("#div2").fadeToggle("slow");
+        //   $("#div3").fadeToggle(3000);
+    });
+    // 用户信息
+    $(".user").click(function () {
+        $(".yh").fadeToggle();
+        //   $("#div2").fadeToggle("slow");
+        //   $("#div3").fadeToggle(3000);
+    });
+    // VIP信息
+    $(".vip").click(function () {
+        $(".hy").fadeToggle();
+        //   $("#div2").fadeToggle("slow");
+        //   $("#div3").fadeToggle(3000);
+    });
+
+    function getParam(paramName) {
+        paramValue = "", isFound = !1;
+        if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+            arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0;
+            while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++
+        }
+        return paramValue == "" && (paramValue = null), paramValue
+    }
+
+    $(function () {
+        var canshu = getParam("canshu")
+        console.log(canshu == null)
+        if (canshu != null) {
+            // $(".shangchuan").trigger("click");
+            $(".sc").fadeIn();
+            console.log(213324);
+        }
+    })
+    $.ajax({
+        url: "http://192.168.1.186:8093/data",
+        data: { "dataDase": "sino", "table": "type_list" },
+        async:false,
+        type: "get",
+        success: function (data) {
+            var html = "";
+            for (var i = 0; i < data.length; i++) {
+                html += `<a target='_top' href="../view/update.html?canshu=` + data[i].id + `"> 
+                <li class="sc">`+ data[i].type + `</li> </a>`
+            }
+            $("#nav_").html(html)
+
+        }
+    })
+    // < 1200
+    $.ajax({
+        url: "http://192.168.1.186:8093/data",
+        data: { "dataDase": "sino", "table": "type_list" },
+        type: "get",
+        success: function (data) {
+            var html2 = "";
+            for (var i = 0; i < data.length; i++) {
+                html2 += `<a target='_top' href="../view/update.html?canshu=` + data[i].id + `"> 
+                <li class="sc">`+ data[i].type + `</li> </a>`
+            }
+            $("#navtwo_").html(html2)
+
+        }
+    })
+
+</script>

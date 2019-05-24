@@ -1,0 +1,97 @@
+button{
+    margin: 0;
+padding: 0;
+border: 1px solid transparent; 
+outline: none;
+}
+/* 添加页面弹窗 */
+.biankuang{
+    /* border: 3px solid #5b9bd1; */
+    /* width: 33%; */
+    margin: 0 auto;
+    /* height: 670px; */
+    overflow: hidden;
+    /* margin-top: 5%; */
+}
+.add input,textarea,button{
+    display: block;
+    width: 100%;
+    margin-bottom: 30px;
+    border: 1px solid #e2e3e4;
+    height: 40px;
+}
+
+.add{
+    /* border: 1px solid red; */
+    width: 30%;
+    width: 56%;
+    margin: 16px auto;
+}
+.bnt1,.bnt2{
+    margin-top: 7%;
+    width: 60px;
+    height: 30px;
+    border-radius: 4px;
+    background-color: #5b9bd1;
+    color: white;
+    letter-spacing: 3px;
+    float: right;
+}
+.bnt2{
+    margin-right: -9%;
+    margin-left: 19px;
+}
+.leixing{
+    float: right;
+    margin: -5px auto;
+    border: 1px solid #e2e3e4;
+    width: 60px;
+    height: 30px;
+}
+.biaoti{
+    letter-spacing: 4px;
+    font-size: 20px;
+    margin-left: 18px;
+    color: #5c9acf;
+    margin-top: 15px;
+}
+.click{
+    background-color: #5b9bd1;
+    color: white;
+}
+/* 上传方式按钮 */
+.shangchuanfs {
+    margin: 0;
+    padding: 0;
+    border: 1px solid transparent; 
+    outline: none;   
+    /* margin-top: -220px;
+    margin-left: 357px; */
+}
+.shangchuanfs input{
+    height: 40px;
+    border: 1px solid #e9ecf3;
+    width: 70px;
+    float: left;
+}
+.lianjie{
+    /* background-color: #e9ecf3;
+    color: black; */
+    margin-left: -6px;
+}
+.videolianjie{
+    height: 38px !important;
+}
+/* 右边显示区域 */
+.right_abc{
+    width: 80%;
+    /* height: 800px; */
+    background-color: white;
+    float: left;
+    margin-top: 1.2%;
+    margin-left: 1%;
+    /* border: 1px solid red; */
+}
+body{
+    background-color: #e9ecf3;
+}

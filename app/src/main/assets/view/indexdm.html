@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script src="../js/vue.min.js"></script>
+	<link rel="stylesheet" href="../css/newtable.css">
+	<link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+	<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<!-- Data Table-->
+    <link rel="stylesheet" type="text/css" href="../css/datatables.min.css"/>
+
+    <!-- Bootstrap extend-->
+    <link rel="stylesheet" href="../css/bootstrap-extend.css">
+
+    <!-- theme style -->
+    <link rel="stylesheet" href="../css/master_style.css">
+	<title>会员列表</title>
+	<style>
+		#table table {
+			width: 100%;
+			font-size: 14px;
+			border: 1px solid #eee
+		}
+
+		#table {
+			padding: 10px 10px;
+		}
+
+		table thead th {
+			background: #f5f5f5;
+			padding: 10px;
+			text-align: left;
+		}
+
+		table tbody td {
+			padding: 10px;
+			text-align: left;
+			border-bottom: 1px solid #eee;
+			border-right: 1px solid #eee;
+		}
+
+		table tbody td img {
+			width: 60px;
+			height: 60px;
+		}
+
+		table tbody td span {
+			margin: 0 10px;
+			cursor: pointer;
+		}
+
+		.delete {
+			color: red;
+		}
+
+		.edit {
+			color: #008cd5;
+		}
+
+		.add {
+			border: 1px solid #eee;
+			margin: 10px 0;
+			padding: 15px;
+		}
+
+		input {
+			border: 1px solid #ccc;
+			padding: 5px;
+			border-radius: 3px;
+			margin-right: 15px;
+		}
+
+		button {
+			background: #5b9bd1;
+			border: 0;
+			padding: 4px 15px;
+			border-radius: 3px;
+			color: #fff;
+		}
+
+		#mask {
+			background: rgba(0, 0, 0, .5);
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			z-index: 4;
+			top: 0;
+			left: 0;
+		}
+
+		.mask {
+			width: 300px;
+			height: 400px;
+			background: rgba(255, 255, 255, 1);
+			position: absolute;
+			left: 0;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			margin: auto;
+			z-index: 47;
+			border-radius: 5px;
+		}
+
+		.title {
+			padding: 10px;
+			border-bottom: 1px solid #eee;
+		}
+
+		.title span {
+			float: right;
+			cursor: pointer;
+		}
+
+		.content {
+			padding: 10px;
+		}
+
+		.content input {
+			width: 270px;
+			margin-bottom: 15px;
+		}
+
+		.zzjz {
+			position: fixed;
+			top: 0;
+			left: 0;
+			background: #000;
+			opacity: 0.3;
+			width: 100%;
+			height: 200%;
+			text-align: center;
+			line-height: 500px;
+			color: #fff;
+			font-size: 20px;
+		}
+
+		/* 隔行变色 */
+		#table tr:nth-child(even) {
+			background-color: #f3f4f6;
+		}
+
+		/* 标题 */
+		.biaoti {
+			font-size: 16px;
+			color: #5c9acf;
+		}
+
+		/* 表格文字颜色 */
+		.neirong {
+			color: #999999;
+		}
+
+		/* 搜索按钮 */
+		.sousuo {
+			float: right;
+		}
+	</style>
+</head>
+
+<body style="background-color:#e9ecf3;">
+	<!-- 头部 -->
+	<div class="top_abc">
+	</div>
+	<div class="left_abc">
+		<!-- 左边菜单栏 -->
+
+	</div>
+	<!-- 右边显示区域 -->
+	<div class="tablele" style="display:none;">
+		<div id="table">
+			<div class="add">
+				<div class="sousuo">
+					<input type="text" placeholder="请输入搜索内容">
+					<span class="glyphicon glyphicon-search"></span>
+				</div>
+				<div style="clear:both"></div>
+				<!-- <input type="text" v-model="addDetail.title" name="title" value="" placeholder="标题" />
+						<input type="text" v-model="addDetail.user" name="user" value="" placeholder="发布人" />
+						<textarea name="text" value="" placeholder="文本" v-model="addDetail.text" /></textarea>
+						<input style="float:left;" type="file" v-model="addDetail.src" name="multerFile" class="multerFile"  multiple  @change='imgAdd' id="add_img"> -->
+				<!-- <button @click="adddetail" onclick="tz()">新增</button> -->
+			</div>
+			<table cellpadding="0" cellspacing="0" id="example5">
+				<thead class="biaoti">
+					<tr>
+						<th>用户ID</th>
+						<th>账户</th>
+						<th>密码</th>
+						<th>注册时间</th>
+						<th>是否为会员</th>
+						<th>渠道</th>
+						<th>会员类型</th>
+						<th>到期时间</th>
+						<th>最后登录时间</th>
+						<th>最后登录IP</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tfoot>
+						<tr>
+							<th>用户ID</th>
+							<th>账户</th>
+							<th>密码</th>
+							<th>注册时间</th>
+							<th>是否为会员</th>
+							<th>渠道</th>
+							<th>会员类型</th>
+							<th>到期时间</th>
+							<th>最后登录时间</th>
+							<th>最后登录IP</th>
+							<th>操作</th>
+						</tr>
+				</tfoot>
+				<tbody class="neirong">
+					<tr v-for="(item,index) in newsList">
+						<td>{{index+1}}</td>
+						<td>{{item.Account}}</td>
+						<td>{{item.Password}}</td>
+						<td>{{item.RegisterTime}}</td>
+						<td>{{item.VipType}}</td>
+						<td>{{item.channel}}</td>
+						<td style="display:none;" width="10%">{{item.viptype_expirtime1}}</td>
+						<td>
+							<div v-for="(item2,index2) in item.vipList">{{item2.content}}</div>
+						</td>
+						<td>
+							<div v-for="(item2,index2) in item.vipList">{{item2.viptype_expirtime}}</div>
+						</td>
+						<td>{{item.LastTime}}</td>
+						<td>{{item.LastIP}}</td>
+						<td>
+							<div><span class="edit" @click="edit(item,index)">编辑</span></div>
+							<div style="margin-top:10px;"><span @click="deletelist(item.UserID,index)" class="delete">删除</span></div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div id="mask" v-if="editlist">
+				<div class="mask">
+					<div class="title">
+						编辑
+						<span @click="editlist=false">
+							X
+						</span>
+					</div>
+					<div class="content">
+						账号:<input type="text" v-model="editDetail.Account" name="title" value="" placeholder="账号" />
+						密码:<input type="text" v-model="editDetail.Password" name="user" value="" placeholder="密码" />
+						<button @click="update">更新</button>
+						<button @click="editlist=false">取消</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="../js/jquery-2.1.4.min.js"></script>
+	<script src="../js/cookie.js"></script>
+	<script src="../js/axios.js"></script>
+	<script src="../js/jquery-ui.js"></script>
+	<script>
+			// $.widget.bridge('uibutton', $.ui.button);
+		</script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/datatables.min.js"></script>
+	<!-- 弹窗插件 -->
+	<link href="../css/sweetalert.css" rel="stylesheet" type="text/css">
+	<script src="../js/sweetalert.min.js"></script>
+	<script>
+		$(function(){
+
+	
+		var user = localStorage.getItem("user");
+		var password = localStorage.getItem("password");
+		var view_data = {}
+		if (!user) {
+			window.location.href = "./login.html";
+		}
+		var save;
+		var editImg;
+		var editIndex;
+		var arr_all = [];
+		var app = new Vue({
+			el: '#table',
+			data: {
+				addDetail: {},
+				editlist: false,
+				editDetail: {},
+				src: '',
+				newsList: [],
+				editid: '',
+				more: [],
+				isFirstDataLoaded:false
+			},
+			created: function () {
+                $('#example5 tfoot th').each( function () {
+                    var title = $(this).text();
+                    $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+                    $.widget.bridge('uibutton', $.ui.button);
+                } );
+
+                // DataTable
+                
+
+                // Apply the search
+               
+            },
+			mounted() {
+
+				var _this = this;
+				axios.get('http://192.168.1.186:8093/data', {
+					params: { "dataDase": "sino", "table": "type_list" }
+				})
+					.then(function (response) {
+						console.log(response.data)
+						$.ajax({
+							url: 'http://192.168.1.186:8093/data',
+							type: 'get',
+							dataType: "json",
+							async: false,
+							data: {
+								"dataDase": "sino", "table": "member_list"
+							},
+							success: function (data) {
+								for (var c = 0; c < data.length; c++) {
+									if (data[c].VipType == 1) {
+										data[c].VipType = "是"
+									} else if (data[c].VipType == 2) {
+										data[c].VipType = "否"
+									}
+								}
+								_this.newsList = data;
+								// console.log(data)
+								for (let i = 0; i < data.length; i++) {
+									let _that = data[i];
+									_that['vipList'] = [];
+									for (let key in _that) {
+										// 如果key字段包含viptype_expirtime 且不为空
+										if (key.indexOf('viptype_expirtime') >= 0 && _that[key]) {
+											// arr_[i]=[];
+											// vip类型
+											let typeNum = key.replace('viptype_expirtime', '');
+											var conetnt;
+											var date_;
+
+											if (parseInt(_that['viptype' + typeNum]) == 1) {
+												date_ = "年"
+											} else if (parseInt(_that['viptype' + typeNum]) == 2) {
+												date_ = "季度"
+											} else if (parseInt(_that['viptype' + typeNum]) == 3) {
+												date_ = "月"
+											}
+
+											for (var j = 0; j < response.data.length; j++) {
+												if (parseInt(typeNum) == response.data[j].id) {
+													conetnt = response.data[j].type + "/" + date_;
+												}
+											}
+											// 组合然后push进vipList
+											let _obj = {
+												['viptype']: date_,
+												['viptype_expirtime']: _that[key],
+												["num"]: parseInt(typeNum),
+												['content']: conetnt
+											}
+											// _that['vipList'].push(_obj)
+											_this.newsList[i].vipList.push(_obj)
+
+										}
+									}
+
+								}
+							},
+							error: function (data) {
+
+							}
+						})
+						// for(var a=0;a<_this.newsList.length;a++){
+						// 	_this.newsList[a].arr_all=[];
+						// 	for(var b=0;b<arr_all.length;b++){
+						// 		if(_this.newsList[a].Account==arr_all[b].Account){
+						// 			_this.newsList[a].arr_all.push(arr_all[b]);
+						// 		}
+						// 	}
+
+						// }
+						console.log(_this.newsList)
+					})
+					.catch(function (error) {
+						console.log(error);
+					});
+
+			
+
+				$(".tablele").show()
+			},
+			methods: {
+				init: function() {
+				
+				// using axios to get data from server
+					// self=this;
+					this.isFirstDataLoaded = true;
+					
+				
+				},
+				// 图片
+				imgAdd() {
+					var oFReader = new FileReader();
+					var file = document.getElementById('add_img').files[0];
+					oFReader.readAsDataURL(file);
+					oFReader.onloadend = function (oFRevent) {
+						// $('img').attr('src',src);
+
+						$("body").append("<div class='zzjz'>正在加载...</div>");
+						setTimeout(function () {
+							$(".zzjz").remove();
+							save = oFRevent.target.result;
+						}, 500)
+
+					}
+				},
+				imgEdit(index) {
+					var oFReader2 = new FileReader();
+					var file2 = document.getElementById('edit_img').files[0];
+					oFReader2.readAsDataURL(file2);
+					oFReader2.onloadend = function (oFRevent) {
+						// $('img').attr('src',src);
+
+						$("body").append("<div class='zzjz'>正在加载...</div>");
+						setTimeout(function () {
+							$(".zzjz").remove();
+							editImg = oFRevent.target.result;
+						}, 500)
+
+					}
+				},
+				//新增
+				adddetail() {
+
+					var fileList = $('#add_img');
+					var imgUrl = "../img/" + fileList[0].name;
+					//这里的思路应该是把this.addDetail传给服务端，然后加载列表this.newsList
+					//this.newsList.push(this.addDetail)
+					this.newsList.push({
+						title: this.addDetail.title,
+						user: this.addDetail.user,
+						dates: this.addDetail.dates,
+						img: save,
+						id: Math.floor(Math.random() * 1000000 + 1)
+					})
+
+					// axios.get('192.168.1.145:8080/',{"a":1}).then((res) =>{
+					// // 若返回正确结果，清空新增输入框的数据
+					// // this.addDetail.title = ""
+					// // this.addDetail.user = ""
+					// // this.addDetail.dates = ""
+					// console.log("成功")
+					// })
+
+
+				},
+				//删除
+				deletelist(id, i) {
+					console.log(id);
+					//这边可以传id给服务端进行删除  ID = id
+					$.ajax({
+						url: 'http://192.168.1.186:8093/delData_user',
+						data: {
+							id: id,
+							database: "sino",
+							table: "member_list"
+						},
+						type: 'get',
+						success: function (data) {
+							console.log("删除成功")
+							window.location.reload();
+						}, error: function (data) {
+							console.log("删除失败")
+						}
+					})
+					this.newsList.splice(i, 1);
+				},
+				//编辑
+				edit(item, index) {
+					editIndex = index;
+					this.editDetail = {
+						UserID: item.UserID,
+						Account: item.Account,
+						Password: item.Password,
+						RegisterTime: item.RegisterTime,
+						Vip: item.Vip,
+						ExpirTime: item.ExpirTime,
+						VipType: item.VipType,
+						LastTime: item.LastTime,
+						LastIP: item.LastIP,
+					}
+					this.editlist = true;
+					this.editid = item.UserID;
+
+				},
+				//确认更新
+				update() {
+					//编辑的话，也是传id去服务端
+					//axios.get('url',{ID:id}).then((res) =>{
+					//			加载列表				
+					//})
+					let _this = this
+					up_add = {
+						UserID: _this.editDetail.UserID,
+						Account: _this.editDetail.Account,
+						Password: _this.editDetail.Password,
+					}
+					console.log(editIndex);
+					_this.newsList[editIndex].Password = up_add.Password;
+					_this.newsList[editIndex].Account = up_add.Account;
+					this.editlist = false;
+					$.ajax({
+						url: 'http://192.168.1.186:8093/user/edit',
+						type: 'get',
+						// processData: false,
+						// contentType: false,
+						// dataType: "json",
+						data: up_add,
+						success: function (data) {
+							console.log(data);
+							window.location.reload();
+						}, error: function (data) {
+							console.log(data)
+						}
+					})
+
+				}
+			}
+		})
+	})
+
+
+
+	
+	$(function(){
+			// setInterval(function(){
+				console.log(1)
+				if ($('#example5').hasClass('dataTable')) {
+					var table = $('#example5').dataTable();
+					table.fnDestroy(); //还原初始化了的datatable
+					table.columns().every( function () {
+                    var that = this;
+
+                    $( 'input', this.footer() ).on( 'keyup change', function () {
+                        if ( that.search() !== this.value ) {
+                            that
+                                .search( this.value )
+                                .draw();
+                        }
+                    } );
+				});
+	}
+// },1000)
+})
+
+	</script>
+</body>
+<script>
+	// 将左侧菜单页面请求过来
+	$.ajax({
+		url: "../common/leftmenu.html",
+		type: "get",
+		success: function (data) {
+			// console.log(data)
+			$(".left_abc").html(data)
+			// console.log(data)
+		}
+	})
+	// 将顶部导航页面请求过来
+	$.ajax({
+		url: "../common/daohang.html",
+		type: "get",
+		success: function (data) {
+			// console.log(data)
+			$(".top_abc").html(data)
+			// console.log(data)
+		}
+	})
+</script>
+
+</html>
